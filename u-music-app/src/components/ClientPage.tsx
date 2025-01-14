@@ -9,7 +9,7 @@ export function ClientPage({ children }: PropsWithChildren) {
       <header>
         <div></div>
         <div>
-          <a href="" className='logo-container'>
+          <a href="index.html" className='logo-container'>
             <img src="./src/assets/logo.svg" className='logo-icon' alt="" />
           </a>
         </div>

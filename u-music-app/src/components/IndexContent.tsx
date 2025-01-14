@@ -8,7 +8,27 @@ export function IndexContent() {
         <>
             <div className='index-intro'>
                 <Catalog>
-
+                    <div>
+                        Гитары
+                    </div>
+                    <div>
+                        Акустика
+                    </div>
+                    <div>
+                        Бас-гитары
+                    </div>
+                    <div>
+                        Пианино
+                    </div>
+                    <div>
+                        Барабаны
+                    </div>
+                    <div>
+                        Скрипки
+                    </div>
+                    <div>
+                        Виолончели
+                    </div>
                 </Catalog>
                 <InstrumentSearch />
             </div>
