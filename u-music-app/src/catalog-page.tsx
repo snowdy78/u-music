@@ -2,13 +2,13 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import './index.css'
-import { ClientPage } from "./components/ClientPage"
-import { IndexContent } from "./components/IndexContent"
+import { ClientPage } from "./components/ClientPage.tsx"
+import { Catalog } from "./components/Catalog.tsx"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ClientPage>
-      <IndexContent></IndexContent>
+      <Catalog/>
     </ClientPage>
   </StrictMode>,
 )

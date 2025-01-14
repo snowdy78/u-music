@@ -1,0 +1,30 @@
+#main-content {
+    width: calc(100% - var(--page-pleft) - var(--page-pright));
+    padding: 0 var(--page-pleft) 0 var(--page-pright);
+}
+
+#main-content hr {
+    border: 0;
+    margin: 0;
+    border-top: 1px solid var(--primary);
+}
+#main-content .category-header {
+    color: var(--primary);
+    line-height: 1rem;
+    margin-bottom: 8px; 
+}
+.categories {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 3px;
+}
+
+.index-intro {
+    width: 100%;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 80%;
+    grid-template-rows: auto;
+}

@@ -1,0 +1,13 @@
+.catalog-dropdown-list {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: 125px;
+    height: 45px;
+    justify-content: center;
+    align-items: center;
+    line-height: 100%;
+    border-radius: 5px;
+    background-color: var(--primary);
+    font-size: 1.1rem;
+}
