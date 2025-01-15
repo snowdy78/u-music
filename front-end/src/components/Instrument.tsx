@@ -1,23 +1,15 @@
 import { useState } from 'react'
 import '@css/App.css'
 import '@css/Instrument.css'
+import { InstrumentCategory } from "../instrument";
 
-export enum InstrumentKind {
-    Guitar = 'Guitar',
-    Bass = 'Bass',
-    Drums = 'Drums',
-    Piano = 'Piano',
-    AcousticGuitar = 'Acoustic Guitar',
-    Ukulele = 'Ukulele',
-    Synth = 'Synth',
-}
 
 export type InstrumentType = {
     model_name: string;
     price: number;
     in_stock: number | 0;
     image: string;
-    type: InstrumentKind;
+    type: InstrumentCategory;
 }
 
 export function Instrument({model_name, price, in_stock, type, image}: InstrumentType) {

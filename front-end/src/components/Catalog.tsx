@@ -1,6 +1,6 @@
 import '@css/Catalog.css'
 import { PropsWithChildren, useRef, useState } from "react";
-import { useClickOutside } from "../hooks/useOutsideAltered";
+import { useClickOutside } from "../hooks/useClickOutside.ts";
 export type CatalogType = PropsWithChildren & {};
 
 export function Catalog({ children }: CatalogType) {
