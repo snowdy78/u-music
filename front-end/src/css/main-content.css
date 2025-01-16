@@ -1,6 +1,7 @@
 #main-content {
     width: calc(100% - var(--page-pleft) - var(--page-pright));
     padding: 20px var(--page-pleft) 0 var(--page-pright);
+    color: var(--black);
 }
 
 #main-content hr {

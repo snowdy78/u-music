@@ -16,7 +16,7 @@ export function Header({}: HeaderProps) {
         </div>
         <div></div>
         <div><Link to="/catalog">Каталог</Link></div>
-        <div><Link to="/login">Вход</Link></div>
+        <div><Link to="/auth">Вход</Link></div>
         <div><Link to="/register">Регистрация</Link></div>
       </header>
 
