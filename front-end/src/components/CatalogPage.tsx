@@ -1,9 +1,10 @@
 import { StrictMode } from 'react'
 
 import { ClientPage } from "./ClientPage.tsx"
-import { Catalog } from "./Catalog.tsx"
+import { CatalogButton } from "./CatalogButton.tsx"
 import { InstrumentSearch } from "./InstrumentSearch.tsx"
 import { Searchable } from "./InstrumentSearch.tsx"
+import { Catalog } from "./Catalog.tsx"
 
 
 export function CatalogPage() {
@@ -15,9 +16,11 @@ export function CatalogPage() {
   return <StrictMode>
       <ClientPage>
         <div className="index-intro">
-          <Catalog/>
+          <CatalogButton/>
           <InstrumentSearch search_list={search_list}></InstrumentSearch>
         </div>
+        <hr />
+        <Catalog />
       </ClientPage>
     </StrictMode>
 }

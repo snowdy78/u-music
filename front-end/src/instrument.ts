@@ -3,7 +3,7 @@ export enum InstrumentCategory {
     Bass = 'Bass',
     Drums = 'Drums',
     Piano = 'Piano',
-    AcousticGuitar = 'Acoustic Guitar',
     Ukulele = 'Ukulele',
     Synth = 'Synth',
+    Trumpet = 'Trumpet',
 }

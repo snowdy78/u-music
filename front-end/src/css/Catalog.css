@@ -1,4 +1,10 @@
 .catalog {
+    display: flex;
+    flex-direction: row;
+    text-align: justify;
+}
+
+.catalog-button {
     position: relative;
 }
 .catalog-dropdown-list {

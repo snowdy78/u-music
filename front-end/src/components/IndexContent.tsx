@@ -1,13 +1,13 @@
 import { InstrumentBanner } from './InstrumentBanner'
 import { InstrumentSearch } from "./InstrumentSearch"
-import { Catalog } from './Catalog'
+import { CatalogButton } from './CatalogButton'
 import '@css/App.css'
 
 export function IndexContent() {
     return (
         <>
             <div className='index-intro'>
-                <Catalog>
+                <CatalogButton>
                     <div>
                         Гитары
                     </div>
@@ -29,13 +29,12 @@ export function IndexContent() {
                     <div>
                         Виолончели
                     </div>
-                </Catalog>
+                </CatalogButton>
                 <InstrumentSearch />
             </div>
             <h2 className='category-header'>
                 Категории
             </h2>
-            <hr />
             <div className='categories'>
             <InstrumentBanner background_image="./src/assets/guitar.png">
                 Гитары
