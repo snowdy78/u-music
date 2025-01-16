@@ -20,13 +20,14 @@
     flex-direction: column;
     width: 125px;
     height: 300px;
-    max-height: 0;
+    scale: 1 0;
     transform: translateY(-5px);
     background-color: var(--primary);
     z-index: 1;
-    transition: max-height 0.3s ease-in-out;
+    transition: scale 0.3s ease-in-out;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    transform-origin: 0 -5px;
 }
 .catalog-dropdown-list__open > .catalog-dropdown-list__items {
     transition: opacity calc(0.4s);
