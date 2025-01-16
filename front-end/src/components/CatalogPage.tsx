@@ -1,14 +1,12 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 
-import './index.css'
-import { ClientPage } from "./components/ClientPage.tsx"
-import { Catalog } from "./components/Catalog.tsx"
-import { InstrumentSearch } from "./components/InstrumentSearch.tsx"
-import { Searchable } from "./components/InstrumentSearch.tsx"
+import { ClientPage } from "./ClientPage.tsx"
+import { Catalog } from "./Catalog.tsx"
+import { InstrumentSearch } from "./InstrumentSearch.tsx"
+import { Searchable } from "./InstrumentSearch.tsx"
 
 
-function Component() {
+export function CatalogPage() {
   const search_list: Searchable[] = [
     {name: "Gibson", href: ""},
     {name: "Fender", href: ""},
@@ -23,7 +21,3 @@ function Component() {
       </ClientPage>
     </StrictMode>
 }
-
-createRoot(document.getElementById('root')!).render(
-  <Component/>,
-)
