@@ -5,7 +5,7 @@ import { CatalogButton } from "./CatalogButton.tsx"
 import { InstrumentSearch } from "./InstrumentSearch.tsx"
 import { Searchable } from "./InstrumentSearch.tsx"
 import { Catalog } from "./Catalog.tsx"
-
+import '@css/App.css'
 
 export function CatalogPage() {
   const search_list: Searchable[] = [
@@ -19,7 +19,7 @@ export function CatalogPage() {
           <CatalogButton/>
           <InstrumentSearch search_list={search_list}></InstrumentSearch>
         </div>
-        <hr />
+        <hr className='hr-indent' />
         <Catalog />
       </ClientPage>
     </StrictMode>

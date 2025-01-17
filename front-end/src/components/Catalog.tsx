@@ -24,12 +24,12 @@ export function Catalog() {
     }, [])
     return (
         <div className='catalog'>
-            {instruments.map((key, value) => (
+            {instruments.map((value, _) => (
                 <Instrument
-                    key={key} 
+                    key={value.id} 
                     model_name={value.model_name}
-                    price={1000}
-                    in_stock={10}
+                    price={value.price}
+                    in_stock={value.in_stock}
                     type={InstrumentCategory.Guitar}
                     image="./src/assets/guitar.png"
                 />

@@ -44,7 +44,10 @@ header > * {
   justify-content: center;
   align-items: center;
 }
-
+.hr-indent {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 .icon {
   max-height: 1em;
   padding: 0 5px;
