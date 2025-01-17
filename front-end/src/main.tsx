@@ -12,6 +12,7 @@ import { ClientPage } from './components/ClientPage'
 import { IndexContent } from './components/IndexContent'
 import { CatalogPage } from './components/CatalogPage'
 import { Auth } from './components/Auth'
+import { Register } from './components/Register'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -25,6 +26,9 @@ createRoot(document.getElementById('root')!).render(
                 />
                 <Route path='/auth' 
                   Component={() => <Auth/> } 
+                />
+                <Route path="/register"
+                  Component={() => <Register /> }
                 />
             </Routes>
         </BrowserRouter>
