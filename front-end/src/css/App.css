@@ -1,4 +1,9 @@
 @import url('main-content.css');
+@import url('Search.css');
+@import url('Catalog.css');
+@import url('Instrument.css');
+@import url('Validation.css');
+@import url('Auth.css');
 
 #root {
   width: 100%;

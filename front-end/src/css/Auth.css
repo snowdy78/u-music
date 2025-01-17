@@ -1,0 +1,62 @@
+:root {
+    --font-size: 1.5rem;
+    --auth-form-primary: var(--primary);
+    --auth-form-secondary: var(--white);
+    --form-bg-color: var(--auth-form-primary);
+    --form-color: var(--auth-form-secondary);
+    --submit-bg-color: var(--auth-form-secondary);
+    --submit-color: var(--auth-form-primary);
+    --hr-color: var(--auth-form-secondary);
+    --forget-passw-color: var(--auth-form-secondary);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size);
+    gap: 10px;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 60px 3% 30px 3%;
+    background-color: var(--form-bg-color);
+    color: var(--form-color);
+    border: 1px solid var(--primary);
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-form a {
+    font-size: 1rem !important;
+    color: var(--forget-passw-color) !important;
+    text-decoration: underline !important;
+}
+.auth-form hr {
+    width: 80%;
+    margin: 10px 0 !important;
+    border-top: 1px solid var(--hr-color) !important;
+}
+.auth-form button {
+    width: fit-content;
+    background-color: var(--submit-bg-color);
+    color: var(--submit-color);
+    font-size: calc(var(--font-size)*0.6) !important;
+    border: 0;
+}
+.auth-form__input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 10px;
+    font-size: calc(var(--font-size)*0.7) !important;
+    border: 0 !important;
+}
+.auth-form__input:focus {
+    outline: none;
+}
+
+.auth-form__input-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
