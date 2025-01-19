@@ -3,6 +3,7 @@ import React from 'react';
 
 export type ValidationFieldInstance = {
     placeholder: string;
+    name?: string;
     input_type: string;
     validate: (data: string) => boolean;
 }
@@ -30,7 +31,7 @@ export function ValidationForm({
                     fields.map((value, key) => (
                         <ValidationField
                             key={key}
-                            name={value.placeholder.toLocaleLowerCase()}
+                            name={value.name}
                             className='auth-form__input'
                             placeholder={value.placeholder}
                             type={value.input_type}

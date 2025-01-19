@@ -13,19 +13,15 @@ export function Catalog() {
     };
     const [instruments, setInstruments] = React.useState<InstrumentInstance[]>([]);
     React.useEffect(() => {
-        (async () => {
-            try {
-                setInstruments(await ServerApi.getInstruments());
-            } catch (error) {
-                console.log();
-            }
-        })()
+        ServerApi.getInstruments().then(
+            instruments => setInstruments(instruments)
+        );
     }, [])
     return (
         <div className='catalog'>
             {instruments.map((value, _) => (
                 <Instrument
-                    key={value.id} 
+                    key={value.id}
                     model_name={value.model_name}
                     price={value.price}
                     in_stock={value.in_stock}
