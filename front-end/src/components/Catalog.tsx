@@ -1,6 +1,7 @@
 import React from "react";
 import { InstrumentCategory } from "../instrument";
 import { Instrument } from "./Instrument";
+import { ServerApi } from "../server-api";
 
 export function Catalog() {
     type InstrumentInstance = {
@@ -14,9 +15,7 @@ export function Catalog() {
     React.useEffect(() => {
         (async () => {
             try {
-                const res = await axios.get("http://localhost:8800/instruments") as any 
-                console.log(res.data);
-                setInstruments([...res.data]);
+                setInstruments(await ServerApi.getInstruments());
             } catch (error) {
                 console.log();
             }

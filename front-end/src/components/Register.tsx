@@ -2,8 +2,6 @@ import React from 'react'
 import { ValidationForm, ValidationFieldInstance } from "./ValidationForm"
 import { ClientPage } from "./ClientPage"
 import { Link } from "react-router-dom";
-import { on } from "events";
-
 
 export function Register() {
     const [password, setPassword] = React.useState('');
