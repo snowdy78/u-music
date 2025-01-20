@@ -26,4 +26,23 @@
     }
     header('Content-Type: application/json');
     cors();
+    function queryWhere(string $query, array $params) : string {
+        $query .= " WHERE ";
+        foreach ($params as $key => $value) {
+            if ($value == null) {
+                unset($params[$key]);
+            }
+        }
+        foreach ($params as $key => $value) {
+            $str_value = ''.$value;
+            if (gettype($value) == 'string') {
+                $str_value = "'$str_value'";
+            }
+            $query .= "$key=$str_value ";
+            if ($key != array_key_last($params)) {
+                $query .= "AND ";
+            }
+        }
+        return $query;
+    }
 ?>

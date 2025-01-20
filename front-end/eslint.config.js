@@ -1,4 +1,3 @@
-import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
@@ -7,7 +6,7 @@ import tseslint from 'typescript-eslint'
 export default tseslint.config(
   { ignores: ['dist'] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    extends: ["standard-with-typescript", "plugin:prettier/recommended"],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -22,6 +21,9 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      "@typescript-eslint/indent": ["error", 4],
+      
+      "prettier/prettier": ["error", { "endOfLine": "auto" }],
       '@typescript-no-unused-vars': 'warn',
     },
   },
