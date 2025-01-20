@@ -65,7 +65,7 @@ export function Register() {
         const data = new URLSearchParams();
         const form_data = new FormData(form);
         for (const pair of form_data) {
-            data.append(pair[0], pair[1] as any);
+            data.append(pair[0], pair[1].toString());
         }
         try {
             await ServerApi.postRegisterUser(data);
