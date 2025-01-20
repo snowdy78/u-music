@@ -25,11 +25,11 @@
 
 a {
   font-weight: 500;
-  color: #e2e2e2;
-  text-decoration: inherit;
+  color: #646cff;
+  text-decoration: underline;
 }
 a:hover {
-  color: var(--white);
+  color: #747bff;
 }
 
 body {

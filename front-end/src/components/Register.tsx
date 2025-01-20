@@ -1,5 +1,5 @@
 import React from 'react'
-import { ValidationForm, ValidationFieldInstance } from "./ValidationForm"
+import { ValidationForm } from "./ValidationForm"
 import { ClientPage } from "./ClientPage"
 import { Link } from "react-router-dom";
 import { ServerApi } from "../server-api";
@@ -7,7 +7,9 @@ import { ServerApi } from "../server-api";
 export function Register() {
     const [password, setPassword] = React.useState('');
     const can_be_submitted = React.useRef(false);
-    const fields: ValidationFieldInstance[] = [
+    const [is_registered, setIsRegistered] = React.useState(false);
+    const [error, setError] = React.useState('');
+    const fields = [
         {
             placeholder: "Login",
             input_type: 'text',
@@ -32,7 +34,7 @@ export function Register() {
         {
             placeholder: "Repeat password",
             input_type: 'password',
-            validate: (data: string) => data.length >= 8 && data === password,
+            validate: (data: string) => data === password,
         },
     ];
     const onValidationError = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,26 +53,35 @@ export function Register() {
             can_be_submitted.current = true
         }
     }
-    const onSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+    const beforeSubmit = (event: React.MouseEvent) => {
         if (can_be_submitted.current) {
-            const form = event.target as HTMLFormElement;
-            ServerApi.postRegisterUser({
-                login: form.login.value,
-                email: form.email.value,
-                password: form.password.value
-            }).then(() => {
-                console.log("user registered!")
-            }).catch(err => console.log(err));
+            return;
+        }
+        event.preventDefault();
+    }
+    const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const form = event.target;
+        const data = new URLSearchParams();
+        const form_data = new FormData(form);
+        for (const pair of form_data) {
+            data.append(pair[0], pair[1] as any);
+        }
+        try {
+            await ServerApi.postRegisterUser(data);
+            setIsRegistered(true);
+            setError('');
+        } catch (err: any) {
+            setError(`${err.name}: ${err.message}`);
+            setIsRegistered(false);
         }
     }
     return (
         <ClientPage>
-            <iframe name="dummyframe" style={{display: 'none'}}/>
-            <ValidationForm 
-                action={ServerApi.url + '/user-register'}
-                target="dummyframe"
-                method='post'
+            <iframe name="dummy-frame" style={{ display: 'none' }} />
+            <ValidationForm
                 header="Регистрация"
+                target="dummy-frame"
                 fields={fields}
                 onValidationError={onValidationError}
                 onValidationPass={onValidationPass}
@@ -78,8 +89,23 @@ export function Register() {
             >
                 <Link to='/auth'>Уже есть аккаунт?</Link>
                 <hr />
-                <button type='submit'>Регистрация</button>
+                <button type='submit' onClick={beforeSubmit}>Регистрация</button>
             </ValidationForm>
+            {
+                is_registered
+                ?   <div className="pass-field">
+                        <p>Аккаунт успешно создан:&nbsp;</p>
+                        <Link to='/auth'>Войти</Link>
+                    </div>
+                :   <></>
+            }
+            {
+                error !== '' 
+                ?   <div className='fail-field'>
+                        <p>{error}</p>
+                    </div> 
+                :   <></>
+            }
         </ClientPage>
     )
 }

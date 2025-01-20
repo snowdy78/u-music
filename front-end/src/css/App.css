@@ -49,6 +49,16 @@ header > * {
   justify-content: center;
   align-items: center;
 }
+
+header a {
+  font-weight: 500;
+  color: #e2e2e2;
+  text-decoration: inherit;
+}
+header a:hover {
+  color: var(--white);
+}
+
 .hr-indent {
   margin-top: 20px;
   margin-bottom: 20px;
