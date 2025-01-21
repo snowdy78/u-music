@@ -4,6 +4,7 @@
 @import url('Instrument.css');
 @import url('Validation.css');
 @import url('Auth.css');
+@import url('Profile.css');
 
 :root {
   --header-height: 60px;
@@ -95,7 +96,21 @@ button:focus {
 }
 
 footer {
+  display: grid;
+  width: calc(100% - var(--page-pleft) - var(--page-pright));
   height: 300px;
+  grid-template-columns: 100%;
+  grid-template-rows: 175px 125px;
   background-color: var(--black);
-  padding: 30px;
+  padding: 30px var(--page-pleft) 30px var(--page-pright);
+}
+
+footer .top-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid var(--dark-grey);
 }

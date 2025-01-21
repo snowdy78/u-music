@@ -16,6 +16,7 @@ const MainStorage =
                 email: user.email,
                 password: user.password,
                 is_admin: user.is_admin === 0 ? false : true,
+                img_id: user.img_id
             });
         },
         logout() {

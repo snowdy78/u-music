@@ -7,6 +7,7 @@ export const User =
         email: types.string,
         password: types.string,
         is_admin: types.boolean,
+        img_id: types.maybeNull(types.number),
     })
     .actions(self => ({
         setLogin(login: string) {

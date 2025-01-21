@@ -12,6 +12,7 @@ import { CatalogPage } from './components/CatalogPage'
 import { Auth } from './components/Auth'
 import { Register } from './components/Register'
 import { MainContent } from "./components/MainContent"
+import { Profile } from "./components/Profile"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -29,6 +30,12 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="/register"
                   Component={() => <Register /> }
                 />
+                <Route path="/profile"
+                  Component={() => <Profile/>}
+                />
+                <Route path="/admin"/>
+                <Route path="/basket"/>
+                <Route path="/instrument/:id"/>
             </Routes>
         </BrowserRouter>
   </StrictMode>,

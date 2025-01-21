@@ -2,7 +2,12 @@ export type ServerApiResponseError = {
   err_code: string;
 };
 export type DataBaseUserInstance = {
-  id: number; login: string; email: string; password: string; is_admin: number;
+  id: number;
+  login: string;
+  email: string;
+  password: string;
+  is_admin: number;
+  img_id: number;
 };
 export type DataBaseUserPossibleAttrs = {
   id?: number;
@@ -65,8 +70,16 @@ export class ServerApi {
   public static async getUsers() {
     return await ServerApi.get(ServerApi.url + '/users');
   }
+  public static async getImages() {
+    return await ServerApi.get(ServerApi.url + '/images');
+  }
   public static async postRegisterUser(body: URLSearchParams): Promise<{}> {
     return await ServerApi.post(ServerApi.url + '/user-register', body);
+  }
+  public static async getImage(id: number) {
+    const map: Map<string, number|string|boolean|undefined> = new Map();
+    map.set('id', id);
+    return await ServerApi.get(ServerApi.url + '/image', map);
   }
   public static async getUser(body: DataBaseUserPossibleAttrs):
       Promise<DataBaseUserInstance> {
