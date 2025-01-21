@@ -3,21 +3,19 @@
     $db = new DataBase();
     $keys = array(
         'id' => null,
-        'login' => null,
-        'email' => null,
-        'password' => null,
-        'is_admin' => null
+        'model_name' => null,
+        'category' => null,
+        'price' => null,
+        'in_stock' => null,
+        'img_id' => null,
     );
     foreach($keys as $key => &$value) {
         $value = $_GET[$key] ?? null;
     }
-    if (isset($keys['password'])) {
-        $keys['password'] = sha1($keys['password']);
-    }
     try {
-        $rows = $db->findUsers($keys, MatchType::All);
+        $row = $db->findInstruments($keys, MatchType::All)[0];
     } catch (IncorrectRequest $err) {
         echo json_encode(array("err_code" => $err->getMessage()));
     }
-    echo json_encode($rows);
+    echo json_encode($row);
 ?>
