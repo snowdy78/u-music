@@ -32,9 +32,12 @@ export function IndexContent() {
                 </CatalogButton>
                 <InstrumentSearch />
             </div>
-            <h2 className='category-header'>
-                Категории
-            </h2>
+            <div style={{padding: '5px 5px 0 8px'}}>
+                <h2 className='category-header'>
+                    Категории
+                </h2>
+            </div>
+            <hr />
             <div className='categories'>
             <InstrumentBanner background_image="./src/assets/guitar.png">
                 Гитары

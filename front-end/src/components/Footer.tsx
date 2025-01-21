@@ -1,6 +1,8 @@
 
 export function Footer() {
     return (
-        <footer />
+        <footer>
+            <div>блабла</div>
+        </footer>
     )
 }

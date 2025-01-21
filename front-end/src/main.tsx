@@ -8,18 +8,17 @@ import {
     Routes,
     Route,
 } from 'react-router-dom'
-import { ClientPage } from './components/ClientPage'
-import { IndexContent } from './components/IndexContent'
 import { CatalogPage } from './components/CatalogPage'
 import { Auth } from './components/Auth'
 import { Register } from './components/Register'
+import { MainContent } from "./components/MainContent"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
             <Routes>
                 <Route path="/" 
-                  Component={() => <ClientPage><IndexContent /></ClientPage>} 
+                  Component={() => <MainContent />} 
                 />
                 <Route path="/catalog" 
                   Component={() => <CatalogPage />} 

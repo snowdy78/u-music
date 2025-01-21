@@ -3,10 +3,8 @@ import { ClientPage } from "./ClientPage"
 import { ValidationForm, ValidationFieldInstance } from './ValidationForm';
 import React from 'react';
 import { ServerApi } from "../server-api";
-import { useStore } from "../store/MainStorage";
 
 export function Auth() {
-    const store = useStore();
     const can_be_submitted = React.useRef(false);
     const [error, setError] = React.useState('');
     const validation_form: ValidationFieldInstance[] = [

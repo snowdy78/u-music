@@ -5,6 +5,10 @@
 @import url('Validation.css');
 @import url('Auth.css');
 
+:root {
+  --header-height: 60px;
+}
+
 #root {
   width: 100%;
   min-height: 100vh;
@@ -38,7 +42,7 @@ header
   display: grid;
 
   width: 100%;
-  height:  60px;
+  height: var(--header-height);
   background-color: #0f0f0f;
   grid-template-columns: var(--page-pleft) 75px 25% 1fr 1fr 1fr var(--page-pright);
   grid-template-rows: 100%;
@@ -88,4 +92,10 @@ button:focus {
 .logo-icon {
   width: 80%;
   height: 80%;
+}
+
+footer {
+  height: 300px;
+  background-color: var(--black);
+  padding: 30px;
 }
