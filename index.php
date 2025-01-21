@@ -24,6 +24,16 @@
         }
         
     }
+    function getRequestArrayAttrs(array $attrs) {
+        $keys = array();
+        for ($i = 0; $i < count($attrs); $i++) {
+            $keys[$attrs[$i]] = null;
+        }
+        foreach($keys as $key => &$value) {
+            $value = $_GET[$key] ?? null;
+        }
+        return $keys;
+    }
     header('Content-Type: application/json');
     cors();
     enum MatchType {
@@ -88,6 +98,16 @@
             )));
         }
         public function registerUser(string $login, string $email, string $password) {
+            if (empty($login)) {
+                throw new IncorrectRequest("Login cannot be empty");
+            }
+            if (empty($email)) {
+                throw new IncorrectRequest("Email cannot be empty");
+            }
+            if (empty($password)) {
+                throw new IncorrectRequest("Password cannot be empty");
+            }
+            $password = sha1($_POST['password']);
             try {
                 $this->findUsers(['email' => $email, 'login' => $login], MatchType::All);
                 throw new UserAlreadyExist("User with such login or email already exists");
@@ -96,10 +116,18 @@
                 "INSERT INTO users (id, login, email, password, is_admin, img_id) 
                             VALUES(DEFAULT, '$login', '$email', '$password', DEFAULT, DEFAULT)"));
         }
-        public function uploadImage(string $img_name, mixed $img_data) {
+        public function uploadImage(string $img_name, string $img_type, mixed $img_data) {
+            if (empty($img_data))
+                throw new IncorrectRequest("File cannot be empty");
+            if (empty($img_type))
+                throw new IncorrectRequest("File type cannot be empty");
+            if (empty($img_name))
+                throw new IncorrectRequest("File name cannot be empty");
+
+            $img_data = addslashes(file_get_contents($img_data));
             $this->handleRequest($this->query(
-                "INSERT INTO `images` (id, name, data) 
-                    VALUES(DEFAULT, '$img_name', '$img_data')"
+                "INSERT INTO `images` (id, name, data, type) 
+                    VALUES(DEFAULT, '$img_name', '$img_data', '$img_type')"
             ));
         }
         public function addInstrument(InstrumentInstance $instrument) {

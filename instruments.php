@@ -1,10 +1,12 @@
 <?php
     include_once "./index.php";
-    $db = new mysqli('localhost', 'root', '', 'u_music_app', 3306);
-    $request = $db->query("SELECT * FROM instruments");
-    if ($request && $request->num_rows > 0) {
-        $row = json_encode(array($request->fetch_array(MYSQLI_ASSOC)));
-        echo $row;
+    $db = new DataBase();
+    $keys = getRequestArrayAttrs(['id', 'model_name', 'category', 'price', 'in_stock', 'img_id']);
+    try {
+        $rows = $db->findInstruments($keys, MatchType::All);
+    } catch (IncorrectRequest $err) {
+        echo json_encode(array("err_code" => $err->getMessage()));
+        exit(-1);
     }
-
+    echo json_encode($rows);
 ?>
