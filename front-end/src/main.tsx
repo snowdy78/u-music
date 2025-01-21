@@ -13,6 +13,7 @@ import { Auth } from './components/Auth'
 import { Register } from './components/Register'
 import { MainContent } from "./components/MainContent"
 import { Profile } from "./components/Profile"
+import { InstrumentPage } from "./components/InstrumentPage"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -35,7 +36,7 @@ createRoot(document.getElementById('root')!).render(
                 />
                 <Route path="/admin"/>
                 <Route path="/basket"/>
-                <Route path="/instrument/:id"/>
+                <Route path="/instrument/:id" Component={() => <InstrumentPage/>}/>
             </Routes>
         </BrowserRouter>
   </StrictMode>,

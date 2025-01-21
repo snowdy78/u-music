@@ -14,7 +14,6 @@ export function Profile() {
             window.location.href = "/auth";
             return;
         }
-        console.log(store.authorized_user.img_id);
         if (store.authorized_user.img_id === null) {
             image_data.current = "./src/assets/default-profile-img.png";
         } else {

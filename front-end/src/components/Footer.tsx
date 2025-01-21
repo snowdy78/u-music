@@ -8,7 +8,6 @@ export function Footer() {
     const is_user_admin = React.useRef(false);
 
     React.useMemo(() => {
-        console.log(store.authorized_user);
         is_user_admin.current = store.authorized_user != null && store.authorized_user.is_admin;
     }, []); 
 

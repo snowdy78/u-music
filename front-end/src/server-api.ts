@@ -81,6 +81,11 @@ export class ServerApi {
     map.set('id', id);
     return await ServerApi.get(ServerApi.url + '/image', map);
   }
+  public static async getInstrument(id: number) {
+    const map: Map<string, number|string|boolean|undefined> = new Map();
+    map.set('id', id);
+    return await ServerApi.get(ServerApi.url + '/instrument', map);
+  }
   public static async getUser(body: DataBaseUserPossibleAttrs):
       Promise<DataBaseUserInstance> {
     const map: Map<string, number|string|boolean|undefined> = new Map();
