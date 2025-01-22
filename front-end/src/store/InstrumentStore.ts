@@ -1,5 +1,6 @@
 import { types, Instance } from "mobx-state-tree";
 import { Instrument, IInstrument } from "./Instrument";
+import { DataBaseInstrumentInstance } from "../server-api";
 
 export const InstrumentStore = 
     types.model('InstrumentStore', {
@@ -14,15 +15,18 @@ export const InstrumentStore =
         },
     }))
     .actions(self => ({
-        insert(instrument: IInstrument) {
-            self.instruments.push(instrument);
+        insert(instrument: DataBaseInstrumentInstance) {
+            self.instruments.push(Instrument.create(instrument));
         },
         erase(id: number) {
             self.instruments.splice(id, 1);
         },
         map<T>(callback: (instrument: IInstrument, index: number) => T) {
             return self.instruments.map(callback);
-        }
+        },
+        forEach(callback: (instrument: IInstrument, index: number) => void) {
+            self.instruments.forEach(callback);
+        },
     }));
 
 export interface IInstrumentStore extends Instance<typeof InstrumentStore> {}

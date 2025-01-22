@@ -8,7 +8,7 @@ export type InstrumentType = {
     model_name: string;
     price: number;
     in_stock: number | 0;
-    image: string;
+    image?: string | null;
     type: EInstrumentCategory;
 }
 
@@ -20,7 +20,7 @@ export function Instrument({model_name, price, in_stock, type, image}: Instrumen
     return (
         <div className="instrument">
             <div className='instrument__image'>
-                <img src={image} alt="nothing" />
+                <img src={image ? image : ""} alt="nothing" />
             </div>
             <div className='instrument__name'>
                 {type}: {model_name}

@@ -78,13 +78,13 @@ export class ServerApi {
       throw new Error(`${e}`)
     }
   }
-  public static async getInstruments() {
+  public static async getInstruments(): Promise<DataBaseInstrumentInstance[]> {
     return await ServerApi.get(ServerApi.url + '/instruments');
   }
-  public static async getUsers() {
+  public static async getUsers(): Promise<DataBaseUserInstance[]> {
     return await ServerApi.get(ServerApi.url + '/users');
   }
-  public static async getImages() {
+  public static async getImages(): Promise<DataBaseImageInstance[]> {
     return await ServerApi.get(ServerApi.url + '/images');
   }
   public static async postRegisterUser(body: URLSearchParams): Promise<{}> {

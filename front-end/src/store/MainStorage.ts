@@ -1,6 +1,6 @@
-import { Instance, types } from 'mobx-state-tree';
+import { flow, Instance, types } from 'mobx-state-tree';
 import { IUser, User } from './User';
-import { DataBaseUserInstance } from "../server-api";
+import { DataBaseUserInstance, ServerApi } from "../server-api";
 import { InstrumentStore } from "./InstrumentStore";
 
 
@@ -23,7 +23,26 @@ export const MainStorage =
         },
         logout() {
             self.authorized_user = null;
-        }
+        },
+        loadInstruments: flow(function* loadInstruments() {
+            try {
+                const response = yield ServerApi.getInstruments();
+                console.log(response);
+                for (let i = 0; i < response.length; i++) {
+                    self.instruments.insert({
+                        id: +response[i].id,
+                        model_name: response[i].model_name,
+                        category: response[i].category,
+                        price: +response[i].price,
+                        in_stock: +response[i].in_stock,
+                        img_id: response[i].img_id === null ? null : +response[i].img_id,
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
+        }),
     }));
 
 
