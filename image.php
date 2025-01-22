@@ -1,7 +1,7 @@
 <?php
     include "./index.php";
     $db = new DataBase();
-    $keys = getRequestArrayAttrs(['id']);
+    $keys = getRequestArrayAttrs(['id'], $_GET);
     try {
         $img = $db->findImages($keys, MatchType::All)[0];
         $img_type = $img['type'];

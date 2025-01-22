@@ -24,13 +24,13 @@
         }
         
     }
-    function getRequestArrayAttrs(array $attrs) {
+    function getRequestArrayAttrs(array $attrs, array $arr) {
         $keys = array();
         for ($i = 0; $i < count($attrs); $i++) {
             $keys[$attrs[$i]] = null;
         }
         foreach($keys as $key => &$value) {
-            $value = $_GET[$key] ?? null;
+            $value = $arr[$key] ?? null;
         }
         return $keys;
     }
@@ -40,7 +40,7 @@
         case All; 
         case Any;
     }
-    function queryWhere(string $query, array $params, MatchType $match) : string {
+    function queryWhere(string $query, array $params, MatchType $match = MatchType::All) : string {
         $sql_operator_between = $match == MatchType::All ? "AND" : "OR";
         foreach ($params as $key => $value) {
             if ($value == null) {
@@ -67,11 +67,39 @@
     class IncorrectRequest extends Exception {}
     class UserRegisterError extends Exception {}
     class InstrumentInstance {
+        public string | null $id = null;
         public string | null $model_name = null;
         public string | null $category = null;
         public string | null $price = null;
         public string | null $in_stock = null;
         public string | null $img_id = null;
+        function toArray() {
+            return [
+                'model_name' => $this->model_name,
+                'category' => $this->category,
+                'price' => $this->price,
+                'in_stock' => $this->in_stock,
+                'img_id' => $this->img_id
+            ];
+        }
+    }
+    class UserInstance {
+        public int | null $id = null;
+        public string | null $login = null;
+        public string | null $email = null;
+        public string | null $password = null;
+        public int | null $is_admin = null;
+        public int | null $img_id = null;        
+        function toArray() {
+            return [
+                'id' => $this->id,
+                'login' => $this->login,
+                'email' => $this->email,
+                'password' => $this->password,
+                'is_admin' => $this->is_admin,
+                'img_id' => $this->img_id
+            ];
+        }
     }
     class DataBase extends mysqli {
         public function __construct() {
@@ -171,6 +199,20 @@
                         $img_id
                     )"
             ));
+        }
+        public function updateUser(UserInstance $user_data) {
+            try {
+                $this->findUsers(['login' => $user_data->login, 'email' => $user_data->email], MatchType::Any);
+                throw new UserAlreadyExist("User with such login or email already exists");
+            } catch (IncorrectRequest) {}
+            $login = empty($user_data->login) ? "" : "login='$user_data->login',";
+            $email = empty($user_data->email) ? "" : "email='$user_data->email',";
+            $password = empty($password) ? "" : "password='".sha1($user_data->password)."',";
+            $is_admin = $user_data->is_admin ? "is_admin=1," : "is_admin=0,";
+            $img_id = "img_id=$user_data->img_id,";
+            $this->handleRequest($this->query(queryWhere(
+                "UPDATE users SET $login $email $password $is_admin $img_id", 
+                    ['id' => $user_data->id])));
         }
         public function findUsers(array $user_data, MatchType $match) {
             return $this->findData('users', $user_data, $match);
