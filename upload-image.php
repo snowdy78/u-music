@@ -15,7 +15,7 @@
     }
 
     try {
-        $db->uploadImage(
+        $id = $db->uploadImage(
             $_FILES['image']['name'],
             $_FILES['image']['type'],
             $_FILES['image']['tmp_name']
@@ -24,5 +24,5 @@
         echo json_encode(array("err_code" => $err->getMessage()));
         exit(-1);
     }
-    echo json_encode(array());
+    echo json_encode(array("img_id" => $id));
 ?>

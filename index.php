@@ -154,9 +154,14 @@
 
             $img_data = addslashes(file_get_contents($img_data));
             $this->handleRequest($this->query(
-                "INSERT INTO `images` (id, name, data, type) 
-                    VALUES(DEFAULT, '$img_name', '$img_data', '$img_type')"
+                "INSERT INTO `images` (id, name, data, type)
+                    VALUES(DEFAULT, '$img_name', '$img_data', '$img_type');"
             ));
+            $request = $this->query(
+                "SELECT LAST_INSERT_ID();"
+            );
+            $this->handleRequest($request);
+            return +$request->fetch_assoc()['LAST_INSERT_ID()'];
         }
         public function addInstrument(InstrumentInstance $instrument) {
             if (empty($instrument->model_name)) {
