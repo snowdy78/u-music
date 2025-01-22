@@ -1,5 +1,5 @@
 import { flow, Instance, types } from 'mobx-state-tree';
-import { IUser, User } from './User';
+import { User } from './User';
 import { DataBaseUserInstance, ServerApi } from "../server-api";
 import { InstrumentStore } from "./InstrumentStore";
 

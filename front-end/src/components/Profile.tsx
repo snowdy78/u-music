@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { useStore } from "../store/hooks/useStore";
-import { ClientPage } from "./ClientPage"; 
 import { ServerApi } from "../server-api";
+import { AuthorizedPage } from "./AuthorizedPage";
 
 
 export function Profile() {
@@ -10,8 +10,7 @@ export function Profile() {
     const image_data = React.useRef<string>("")
     const image_alt = React.useRef<string>("")
     React.useMemo(() => {
-        if (store.authorized_user == null) {
-            window.location.href = "/auth";
+        if (store.authorized_user === null) {
             return;
         }
         if (store.authorized_user.img_id === null) {
@@ -28,7 +27,7 @@ export function Profile() {
         window.location.href = "/";
     }
     return (
-        <ClientPage>
+        <AuthorizedPage>
             <div className="profile">
                 <h2>Профиль</h2>
                 <img className='profile__image' src={image_data.current} alt={image_alt.current} />
@@ -38,15 +37,17 @@ export function Profile() {
                     Корзина
                 </Link>
                 <div className='container'>
-                    <button className='profile__edit-button'>
-                        <img className='icon' src='./src/assets/icons/edit-white.svg'/>
-                        Редактировать
-                    </button>
+                    <Link to='/profile/edit'>
+                        <button className='profile__edit-button'>
+                            <img className='icon' src='./src/assets/icons/edit-white.svg'/>
+                            Редактировать
+                        </button>
+                    </Link>
                     <button className='profile__logout-button' onClick={logout}>
                         Выйти
                     </button>
                 </div>
             </div>
-        </ClientPage>
+        </AuthorizedPage>
     );
 }
