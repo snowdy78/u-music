@@ -11,13 +11,13 @@ export function Auth() {
         {
             placeholder: "Login",
             name: 'login',
-            input_type: 'text',
+            type: 'text',
             validate: (data: string) => data.length > 0
         },
         {
             placeholder: "Password",
             name: 'password',
-            input_type: 'password',
+            type: 'password',
             validate: (data: string) => data.length >= 8
         }
     ]

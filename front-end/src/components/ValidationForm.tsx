@@ -2,11 +2,8 @@ import { ValidationField } from "./ValidationField"
 import React from 'react';
 
 export type ValidationFieldInstance = {
-    placeholder: string;
-    name?: string;
-    input_type: string;
     validate: (data: string) => boolean;
-}
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
 export type ValidationFormProps = {
     header?: string;
@@ -28,18 +25,17 @@ export function ValidationForm({
             <h3>{header}</h3>
             <div className="auth-form__input-fields">
                 {
-                    fields.map((value, key) => (
-                        <ValidationField
-                            key={key}
-                            name={value.name}
-                            className='auth-form__input'
-                            placeholder={value.placeholder}
-                            type={value.input_type}
-                            validate={value.validate}
-                            onError={onValidationError}
-                            onPass={onValidationPass}
-                        />
-                    ))
+                    fields.map(({className, ...value}, key) => {
+                        return (
+                            <ValidationField
+                                {...value}
+                                key={key}
+                                className={`${className} auth-form__input`}
+                                onError={onValidationError}
+                                onPass={onValidationPass}
+                            />
+                        )
+                    })
                 }
             </div>
             {children}

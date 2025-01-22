@@ -1,5 +1,5 @@
 import React from 'react'
-import { ValidationForm } from "./ValidationForm"
+import { ValidationFieldInstance, ValidationForm } from "./ValidationForm"
 import { ClientPage } from "./ClientPage"
 import { Link } from "react-router-dom";
 import { ServerApi } from "../server-api";
@@ -9,22 +9,22 @@ export function Register() {
     const can_be_submitted = React.useRef(false);
     const [is_registered, setIsRegistered] = React.useState(false);
     const [error, setError] = React.useState('');
-    const fields = [
+    const fields: ValidationFieldInstance[] = [
         {
             placeholder: "Login",
-            input_type: 'text',
+            type: 'text',
             name: 'login',
             validate: (data: string) => data.length > 0,
         },
         {
             placeholder: "Email",
-            input_type: 'email',
+            type: 'email',
             name: 'email',
             validate: (data: string) => data.length > 0,
         },
         {
             placeholder: "Password",
-            input_type: 'password',
+            type: 'password',
             name: 'password',
             validate: (data: string) => {
                 setPassword(data)
@@ -33,7 +33,7 @@ export function Register() {
         },
         {
             placeholder: "Repeat password",
-            input_type: 'password',
+            type: 'password',
             validate: (data: string) => data === password,
         },
     ];
