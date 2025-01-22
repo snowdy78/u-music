@@ -14,6 +14,7 @@ import { Register } from './components/Register'
 import { MainContent } from "./components/MainContent"
 import { Profile } from "./components/Profile"
 import { InstrumentPage } from "./components/InstrumentPage"
+import { Error404Page } from "./components/Error404Page"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -21,6 +22,9 @@ createRoot(document.getElementById('root')!).render(
             <Routes>
                 <Route path="/" 
                   Component={() => <MainContent />} 
+                />
+                <Route path="/404"
+                  Component={() => <Error404Page />}
                 />
                 <Route path="/catalog" 
                   Component={() => <CatalogPage />} 
