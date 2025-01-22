@@ -7,7 +7,7 @@ export type DataBaseUserInstance = {
   email: string;
   password: string;
   is_admin: number;
-  img_id: number;
+  img_id: number | null;
 };
 export type DataBaseUserPossibleAttrs = {
   id?: number;
@@ -16,6 +16,20 @@ export type DataBaseUserPossibleAttrs = {
   password?: string;
   is_admin?: boolean;
 }
+export type DataBaseInstrumentInstance = {
+  id: number;
+  model_name: string;
+  category: string;
+  price: number;
+  in_stock: number;
+  img_id: number | null;
+};
+export type DataBaseImageInstance = {
+  id: number;
+  name: string;
+  data: string;
+  type: string;
+};
 
 export class ServerApi {
   public static url = 'http://localhost:80/u-music';
@@ -76,12 +90,12 @@ export class ServerApi {
   public static async postRegisterUser(body: URLSearchParams): Promise<{}> {
     return await ServerApi.post(ServerApi.url + '/user-register', body);
   }
-  public static async getImage(id: number) {
+  public static async getImage(id: number): Promise<DataBaseImageInstance> {
     const map: Map<string, number|string|boolean|undefined> = new Map();
     map.set('id', id);
     return await ServerApi.get(ServerApi.url + '/image', map);
   }
-  public static async getInstrument(id: number) {
+  public static async getInstrument(id: number): Promise<DataBaseInstrumentInstance> {
     const map: Map<string, number|string|boolean|undefined> = new Map();
     map.set('id', id);
     return await ServerApi.get(ServerApi.url + '/instrument', map);

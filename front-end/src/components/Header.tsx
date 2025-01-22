@@ -13,7 +13,7 @@ export function Header({}: HeaderProps) {
       <div></div>
       <div>
         <Link to="/" className='logo-container'>
-          <img src="./src/assets/logo.svg" className='logo-icon' alt="" />
+          <img src="/src/assets/logo.svg" className='logo-icon' alt="" />
         </Link>
       </div>
       <div></div>
