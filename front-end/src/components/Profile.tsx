@@ -7,17 +7,17 @@ import { AuthorizedPage } from "./AuthorizedPage";
 
 export function Profile() {
     const store = useStore();
-    const image_data = React.useRef<string>("")
+    const [image_data, setImageData] = React.useState<string>("")
     const image_alt = React.useRef<string>("")
     React.useMemo(() => {
         if (store.authorized_user === null) {
             return;
         }
         if (store.authorized_user.img_id === null) {
-            image_data.current = "./src/assets/default-profile-img.png";
+            setImageData("./src/assets/default-profile-img.png");
         } else {
             ServerApi.getImage(store.authorized_user.img_id).then(image_json => {
-                image_data.current = image_json.data;
+                setImageData(image_json.data);
             }).catch(err => image_alt.current = err.message);
         }
     }, []);
@@ -30,7 +30,7 @@ export function Profile() {
         <AuthorizedPage>
             <div className="profile">
                 <h2>Профиль</h2>
-                <img className='profile__image' src={image_data.current} alt={image_alt.current} />
+                <img className='profile__image' src={image_data} alt={image_alt.current} />
                 <p>Логин: {store.authorized_user?.login}</p>
                 <p>Почта: {store.authorized_user?.email}</p>
                 <Link to="/basket" className='profile__basket-link'>

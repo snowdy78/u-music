@@ -15,6 +15,7 @@ import { MainContent } from "./components/MainContent"
 import { Profile } from "./components/Profile"
 import { InstrumentPage } from "./components/InstrumentPage"
 import { Error404Page } from "./components/Error404Page"
+import { ProfileEdit } from "./components/ProfileEdit"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -37,6 +38,9 @@ createRoot(document.getElementById('root')!).render(
                 />
                 <Route path="/profile"
                   Component={() => <Profile/>}
+                />
+                <Route path="/profile/edit"
+                  Component={() => <ProfileEdit/>}
                 />
                 <Route path="/admin"/>
                 <Route path="/basket"/>

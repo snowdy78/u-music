@@ -6,6 +6,9 @@
     border-radius: 5px;
     padding: 5px 10px;
 }
+.validation-field__input .pass-field {
+    transition: box-shadow 0.2s;
+}
 
 .validation-field__input:active {
     outline-color: 1px solid var(--dark-grey);
@@ -13,14 +16,14 @@
 
 .validation-error {
     --main-color: var(--fail);
-    color: var(--main-color);
+    text-decoration: wavy;
+    text-decoration-color: var(--main-color);
     border: 1px solid var(--main-color);
 }
 
 .validation-passed {
     --main-color: var(--pass);
-    color: var(--main-color);
-    border: 1px solid var(--main-color);
+    box-shadow: 0px 4px 1px var(--main-color);
 }
 
 .pass-field {

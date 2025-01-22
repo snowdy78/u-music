@@ -27,7 +27,6 @@ export const MainStorage =
         loadInstruments: flow(function* loadInstruments() {
             try {
                 const response = yield ServerApi.getInstruments();
-                console.log(response);
                 for (let i = 0; i < response.length; i++) {
                     self.instruments.insert({
                         id: +response[i].id,

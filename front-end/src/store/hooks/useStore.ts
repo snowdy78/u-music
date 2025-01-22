@@ -12,7 +12,7 @@ export function useStore(): IMainStorage {
             email: user_json.email,
             password: user_json.password,
             is_admin: user_json.is_admin == 0 ? false : true,
-            img_id: user_json.img_id
+            img_id: user_json.img_id === null ? null : +user_json.img_id
         });
     }
     return MainStorage.create({

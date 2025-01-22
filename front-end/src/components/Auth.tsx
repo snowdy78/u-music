@@ -7,36 +7,38 @@ import { ServerApi } from "../server-api";
 export function Auth() {
     const can_be_submitted = React.useRef(false);
     const [error, setError] = React.useState('');
+    const onFail = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target instanceof Element) {
+            if (event.target.classList.contains('validation-passed'))
+                event.target.classList.remove('validation-passed');
+            event.target.classList.add('validation-error');
+        }
+    }
+    const onPass = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target instanceof Element) {
+            if (event.target.classList.contains('validation-error'))
+                event.target.classList.remove('validation-error');
+            event.target.classList.add('validation-passed');
+        }
+    }
     const validation_form: ValidationFieldInstance[] = [
         {
             placeholder: "Login",
             name: 'login',
             type: 'text',
-            validate: (data: string) => data.length > 0
+            validate: (data: string) => data.length > 0,
+            onFail,
+            onPass
         },
         {
             placeholder: "Password",
             name: 'password',
             type: 'password',
-            validate: (data: string) => data.length >= 8
+            validate: (data: string) => data.length >= 8,
+            onFail,
+            onPass
         }
     ]
-    const onValidationError = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target instanceof Element) {
-            if (event.target.classList.contains('validation-passed'))
-                event.target.classList.remove('validation-passed');
-            event.target.classList.add('validation-error');
-            can_be_submitted.current = false;
-        }
-    }
-    const onValidationPass = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target instanceof Element) {
-            if (event.target.classList.contains('validation-error'))
-                event.target.classList.remove('validation-error');
-            event.target.classList.add('validation-passed');
-            can_be_submitted.current = true;
-        }
-    }
     const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!can_be_submitted.current)
@@ -53,14 +55,20 @@ export function Auth() {
             setError(err.message);
         }
     }
+    function onValidationPass() {
+        can_be_submitted.current = true;
+    }
+    function onValidationFail() {
+        can_be_submitted.current = false;
+    }
     return (
         <ClientPage>
             <ValidationForm
                 header="Вход"
                 fields={validation_form}
-                onValidationError={onValidationError}
-                onValidationPass={onValidationPass}
                 onSubmit={onSubmit}
+                onValidationPass={onValidationPass}
+                onValidationFail={onValidationFail}
             >
                 <Link to="/register" className='forget-password'>Забыли пароль?</Link>
                 <hr />
