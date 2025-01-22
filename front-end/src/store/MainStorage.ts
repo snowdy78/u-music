@@ -5,7 +5,7 @@ import { InstrumentStore } from "./InstrumentStore";
 
 
 
-const MainStorage = 
+export const MainStorage = 
     types.model('MainStorage', {
         authorized_user: types.maybeNull(User),
         instruments: InstrumentStore,
@@ -28,22 +28,3 @@ const MainStorage =
 
 
 export interface IMainStorage extends Instance<typeof MainStorage> {}
-
-export function useStore(): IMainStorage {
-    let user: IUser | null = null;
-    if (sessionStorage.getItem('authorized-user') !== null) {
-        const user_json = JSON.parse(sessionStorage.getItem('authorized-user') as string);
-        user = User.create({
-            id: user_json.id,
-            login: user_json.login,
-            email: user_json.email,
-            password: user_json.password,
-            is_admin: user_json.is_admin == 0 ? false : true,
-            img_id: user_json.img_id
-        });
-    }
-    return MainStorage.create({
-        authorized_user: user,
-        instruments: InstrumentStore.create({}),
-    });
-}

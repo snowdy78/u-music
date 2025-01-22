@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStore } from "../store/MainStorage";
+import { useStore } from "../store/hooks/useStore";
 import { Link } from "react-router";
 
 

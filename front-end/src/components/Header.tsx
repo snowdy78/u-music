@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 import { Link } from 'react-router-dom'
-import { useStore } from "../store/MainStorage";
+import { useStore } from "../store/hooks/useStore";
 
 export type HeaderProps = PropsWithChildren & {
     authorized?: true;

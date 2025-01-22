@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { useStore } from "../store/MainStorage";
+import { useStore } from "../store/hooks/useStore";
 import { ClientPage } from "./ClientPage"; 
 import { ServerApi } from "../server-api";
 
