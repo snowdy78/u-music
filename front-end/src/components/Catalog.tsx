@@ -10,11 +10,11 @@ export function Catalog() {
         store.loadInstruments().then(() => {
             store.instruments.forEach((instrument, _) => {
                 if (instrument.hasImg()) {
-                    instrument.loadImgData();
+                    instrument.loadImgData().catch(rejection => console.error('img not loaded: ' + rejection.message));
                 }
             });
             setInstruments(store.instruments);
-        });
+        }).catch(rejection => console.error('instruments not loaded: ' + rejection.message));
     }, []);
     return (
         <div className='catalog'>

@@ -1,12 +1,11 @@
 <?php
     include_once "./index.php";
     $db = new DataBase();
-    $keys = getRequestArrayAttrs(['id', 'login', 'email', 'password', 'is_admin', 'img_id'], $_GET);
-    if (isset($keys['password'])) {
-        $keys['password'] = sha1($keys['password']);
+    if (!empty($_GET['password'])) {
+        $_GET['password'] = sha1($_GET['password']);
     }
     try {
-        $rows = $db->findUsers($keys, MatchType::All);
+        $rows = $db->findUsers($_GET, MatchType::All);
     } catch (IncorrectRequest $err) {
         echo json_encode(array("err_code" => $err->getMessage()));
         exit(-1);

@@ -43,16 +43,6 @@
         }
         return $result;
     }
-    function getRequestArrayAttrs(array $attrs, array $arr) {
-        $keys = array();
-        for ($i = 0; $i < count($attrs); $i++) {
-            $keys[$attrs[$i]] = null;
-        }
-        foreach($keys as $key => &$value) {
-            $value = $arr[$key] ?? null;
-        }
-        return $keys;
-    }
     header('Content-Type: application/json');
     cors();
     enum MatchType {
@@ -65,7 +55,7 @@
             return $query;
         }
         $query .= " WHERE ";
-        $query .= arrayToEnumString($params, "$sql_operator_between");
+        $query .= arrayToEnumString($params, $sql_operator_between);
         return $query;
     }
     class UserAlreadyExist extends Exception {}
@@ -90,11 +80,12 @@
             return $row;
         }
         private function findData(string $table_name, array $data, MatchType $match) {
-            return $this->requestToData($this->query(queryWhere(
+            $query = queryWhere(
                 "SELECT * FROM $table_name", 
                 $data, 
                 $match
-            )));
+            );
+            return $this->requestToData($this->query($query));
         }
         public function registerUser(string $login, string $email, string $password) {
             if (empty($login)) {

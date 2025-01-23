@@ -35,7 +35,7 @@ export class ServerApi {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-      }
+      },
     })
     if (response.ok) {
       try {
