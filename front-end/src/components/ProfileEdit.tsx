@@ -7,9 +7,32 @@ import { useStore } from "../store/hooks/useStore";
 export function ProfileEdit() {
     const [error, setError] = React.useState('');
     const [success, setSuccess] = React.useState('');
+    const password_is_valid = React.useRef(true);
     const store = useStore();
     if (store.authorized_user === null) {
         return null;
+    }
+    const onFail = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const field = validation_form_fields.find(field => field.name === event.target.name);
+        if (field === undefined)
+            return;
+        if (event.target instanceof Element) {
+            if (event.target.classList.contains('validation-passed'))
+                event.target.classList.remove('validation-passed');
+            if (field.value !== event.target.value)
+                event.target.classList.add('validation-error');
+        }
+    }
+    const onPass = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const field = validation_form_fields.find(field => field.name === event.target.name);
+        if (field === undefined)
+            return;
+        if (event.target instanceof Element) {
+            if (event.target.classList.contains('validation-error'))
+                event.target.classList.remove('validation-error');
+            if (field.value !== event.target.value)
+                event.target.classList.add('validation-passed');
+        }
     }
     const validation_form_fields: ValidationFieldInstance[] = [
         {
@@ -18,33 +41,49 @@ export function ProfileEdit() {
             id: 'avatar-upload',
             type: 'file',
             maxLength: 1024000,
-            validate: () => true
+            validate: () => true,
+            onPass,
+            onFail
         },
         {
             placeholder: "Логин",
             name: 'login',
             type: 'text',
             value: store.authorized_user.login,
-            validate: (data: string) => data.length > 0,
+            validate: (data: string) => data.length > 0 && store.authorized_user?.login !== data,
+            onPass,
+            onFail
         },
         {
             placeholder: "Email",
             name: 'email',
             type: 'email',
             value: store.authorized_user.email,
-            validate: (data: string) => data.length > 0
+            validate: (data: string) => data.length > 0 && store.authorized_user?.email !== data,
+            onPass,
+            onFail
         },
         {
             placeholder: "Пароль",
             name: 'password',
             type: 'password',
-            validate: (data: string) => data.length >= 8
+            className: 'input_password',
+            validate: (data: string) => data.length >= 8 || data.length === 0,
+            onPass,
+            onFail
         },
         {
             placeholder: "Повторите пароль",
             name: 'password_repeat',
             type: 'password',
-            validate: (data: string) => data.length >= 8
+            validate: (data: string) => {
+                const password = document.querySelector('.input_password') as HTMLInputElement;
+                const valid = password.value === data;
+                password_is_valid.current = valid;
+                return valid;
+            },
+            onPass,
+            onFail
         },
     ];
     async function onSubmit(event: React.ChangeEvent<HTMLFormElement>) {
@@ -55,6 +94,10 @@ export function ProfileEdit() {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const formData = new FormData(form);
+        if (!password_is_valid.current) {
+            setError('Пароли не совпадают');
+            return;
+        }
         const user_data = new URLSearchParams();
         user_data.append('id', store.authorized_user.id);
         let image_id: string | undefined;
@@ -67,8 +110,9 @@ export function ProfileEdit() {
         const user_array_data: any = {
             ...store.authorized_user,
         };
+        const except = ['password_repeat', 'image'];
         formData.forEach((value, key) => {
-            if (key === 'image' || value === '' || value.toString() === user_array_data[key])
+            if (except.find(item => item === key) !== undefined || value === '' || value.toString() === user_array_data[key])
                 return;
             user_data.append(key, value.toString());
         });

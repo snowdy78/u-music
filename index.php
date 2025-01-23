@@ -204,6 +204,9 @@
                 } catch (IncorrectRequest) {}
             }
             $id = $user_data['id'];
+            if (!empty($user_data['password'])) {
+                $user_data['password'] = sha1($user_data['password']);              
+            }
             $query = "UPDATE `users` SET ".arrayToEnumString($user_data, ",")." WHERE id=$id";
             $this->handleRequest($this->query($query));
         }

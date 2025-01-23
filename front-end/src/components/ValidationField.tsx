@@ -30,7 +30,7 @@ export function ValidationField({
             <input
                 {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
                 className={`validation-field__input` + (className === undefined ? "" : " " + className)}
-                value={inputValue === null ? value : inputValue}
+                value={inputValue === null ? value : undefined}
                 onChange={(event: ChangeEvent) => {
                     onChange?.(event);
                     handleChange(event)

@@ -43,6 +43,9 @@
     font-size: calc(var(--font-size)*0.6) !important;
     border: 0;
 }
+.auth-form button[disabled=true] {
+    background-color: color-mix(in srgb, gray, var(--submit-bg-color));
+}
 .auth-form__input {
     display: flex;
     justify-content: center;
