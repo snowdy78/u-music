@@ -24,6 +24,25 @@
         }
         
     }
+    function implodeToSqlData(string $sep, $arr) {
+        $result = '';
+        foreach ($arr as $key => $value) {
+            if (!isset($value)) {
+                unset($arr[$key]);
+            }
+        }
+        foreach ($arr as $key => $value) {
+            $str_value = ''.$value;
+            if (gettype($value) === 'string') {
+                $str_value = "'$str_value'";
+            }
+            $result .= "$str_value";
+            if ($key != array_key_last($arr)) {
+                $result .= "$sep ";
+            }
+        }
+        return $result;
+    }
     function arrayToEnumString(array $arr, string $sep) {
         $result = '';
         foreach ($arr as $key => $value) {
@@ -126,11 +145,10 @@
             return +$request->fetch_assoc()['LAST_INSERT_ID()'];
         }
         public function addInstrument(array $instrument) {
-            if (empty($instrument['model_name'])) {
-                throw new IncorrectRequest("Instrument model name cannot be empty");
-            }
-            if (empty($instrument['category'])) {
-                throw new IncorrectRequest("Instrument category cannot be empty");
+            foreach (['model_name', 'category'] as $key) {
+                if (empty($instrument[$key])) {
+                    throw new IncorrectRequest("Instrument $key cannot be empty");
+                }
             }
             try {
                 $i = $this->findInstruments(
@@ -140,32 +158,19 @@
                     ],
                     MatchType::All,
                 )[0];
-                $id = $i->id;
-                $in_stock = +$i['in_stock'];
-                $in_stock++;
-                $this->handleRequest($this->query("UPDATE instruments SET in_stock=$in_stock WHERE id=$id"));
+                $id = $i['id'];
+                $in_stock = $i['in_stock'];
+                $this->handleRequest($this->query("UPDATE instruments SET in_stock=$in_stock+1 WHERE id=$id"));
                 return;
             } catch (IncorrectRequest) {}
-            if (empty($price)) {
-                throw new IncorrectRequest("Instrument price cannot be empty");
+            foreach (['price', 'img_id', 'in_stock'] as $key) {
+                if (empty($instrument[$key])) {
+                    throw new IncorrectRequest("Instrument $key cannot be empty");
+                }
             }
-            $model_name = $instrument['model_name'];
-            $category = $instrument['category'];
-            $price = $instrument['price'];
-            $in_stock = $instrument['in_stock'] ?? 1;
-            $img_id = $instrument['img_id'];
-            $img_id = empty($img_id) ? 'DEFAULT' : "$img_id";
-            $this->handleRequest($this->query(
-                "INSERT INTO instruments (id, model_name, category, price, in_stock, img_id) 
-                    VALUES(
-                        DEFAULT,
-                        '$model_name',
-                        '$category',
-                        $price,
-                        $in_stock,
-                        $img_id
-                    )"
-            ));
+            $query = "INSERT INTO instruments (id, ".implode(', ', array_keys($instrument)).") 
+                VALUES(DEFAULT, ".implodeToSqlData(', ', $instrument).")";
+            $this->handleRequest($this->query($query));
         }
         public function updateUser(array $user_data) {
             if (!isset($user_data['id'])) {
