@@ -16,7 +16,8 @@ export function Instruments({name, header, ...props}: ContentComponentProps): Re
     async function onInstrumentRemove(id: number) {
         await ServerApi.deleteInstrument(id);
         store.instruments.eraseById(id);
-        setInstruments([...store.instruments.getArray()]);
+        if (!instruments) return;
+        instruments.splice(instruments.findIndex((instrument) => instrument.id === id), 1);
     }
     function onInstrumentEdit(id: number) {
         window.location.href = `admin/instrument-edit/${id}`;
