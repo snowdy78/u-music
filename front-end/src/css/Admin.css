@@ -1,0 +1,59 @@
+:root {
+    --instrument-table-column-count: 8;
+}
+
+.admin-routing {
+    color: var(--black);
+    display: flex;
+    flex-direction: row;
+}
+.admin-routing > * {
+    color: var(--black);
+    text-decoration: none;
+    padding: 10px;
+    border-bottom: 1px solid var(--black);
+    transition: border-bottom-width 0.15s;
+}
+.route {
+    cursor: pointer;
+    user-select: none;
+}
+.route.active {
+    border-bottom-width: 4px;
+}
+.admin-instrument__field button {
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+.admin .btn:has(.trash-icon),
+.admin .btn:has(.edit-icon) {
+    transition: background-color 0.15s;
+}
+.admin .btn:has(.edit-icon):hover {
+    background-color: var(--secure) !important;
+}
+.admin .btn:has(.trash-icon):hover {
+    background-color: var(--fail) !important;
+}
+.admin-instrument__field {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+    align-self: center;
+    border-left: 1px solid var(--black);
+    border-top: 1px solid var(--black); 
+}
+
+.instrument__row {
+    display: grid;
+    grid-template-columns: 1em repeat(5, 1fr) 2em 2em;
+    height: 2em;
+    flex-direction: row;
+    border-right: 1px solid var(--black);
+}

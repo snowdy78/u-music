@@ -16,36 +16,45 @@ import { Profile } from "./components/Profile"
 import { InstrumentPage } from "./components/InstrumentPage"
 import { Error404Page } from "./components/Error404Page"
 import { ProfileEdit } from "./components/ProfileEdit"
+import { Admin } from "./components/admin/Admin"
+import { InstrumentEdit } from "./components/admin/InstrumentEdit"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-            <Routes>
-                <Route path="/" 
-                  Component={() => <MainContent />} 
-                />
-                <Route path="/404"
-                  Component={() => <Error404Page />}
-                />
-                <Route path="/catalog" 
-                  Component={() => <CatalogPage />} 
-                />
-                <Route path='/auth' 
-                  Component={() => <Auth/> } 
-                />
-                <Route path="/register"
-                  Component={() => <Register /> }
-                />
-                <Route path="/profile"
-                  Component={() => <Profile/>}
-                />
-                <Route path="/profile/edit"
-                  Component={() => <ProfileEdit/>}
-                />
-                <Route path="/admin"/>
-                <Route path="/basket"/>
-                <Route path="/instrument/:id" Component={() => <InstrumentPage/>}/>
-            </Routes>
-        </BrowserRouter>
+      <Routes>
+          <Route path="/" 
+            Component={() => <MainContent />} 
+          />
+          <Route path="/404"
+            Component={() => <Error404Page />}
+          />
+          <Route path="/catalog" 
+            Component={() => <CatalogPage />} 
+          />
+          <Route path='/auth' 
+            Component={() => <Auth/> } 
+          />
+          <Route path="/register"
+            Component={() => <Register /> }
+          />
+          <Route path="/profile"
+            Component={() => <Profile/>}
+          />
+          <Route path="/profile/edit"
+            Component={() => <ProfileEdit/>}
+          />
+          <Route path="/admin" 
+            Component={() => <Admin />}
+          />
+          <Route path="/admin/instrument-edit/:id"
+            Component={() => <InstrumentEdit />}
+          />
+          <Route path="/basket"/>
+          <Route path="/instrument/:id" 
+            Component={() => <InstrumentPage/>}
+          />
+      </Routes>
+  </BrowserRouter>
   </StrictMode>,
 )

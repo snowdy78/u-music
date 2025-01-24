@@ -5,6 +5,8 @@
 @import url('Validation.css');
 @import url('Auth.css');
 @import url('Profile.css');
+@import url('Admin.css');
+@import url('InstrumentEdit.css');
 
 :root {
   --header-height: 60px;
@@ -77,8 +79,14 @@ header .basket {
   margin-bottom: 20px;
 }
 .icon {
-  max-height: 1em;
+  height: 1em;
   padding: 0 5px;
+}
+button > .icon {
+  transition: background-color 0.15s;
+}
+button:hover {
+  border-color: transparent;
 }
 .logo-container {
   width: 100%;

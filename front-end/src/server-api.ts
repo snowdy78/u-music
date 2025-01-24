@@ -51,17 +51,13 @@ export class ServerApi {
   private static async post(
       url: string, body: URLSearchParams|FormData|FormDataEntryValue,
       headers: any = {'Content-Type': 'application/x-www-form-urlencoded'}) {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body
-    })
+    const response = await fetch(url, {method: 'POST', headers, body})
     if (!response.ok) {
       throw new Error(`RequestError: ${response.status}`)
     }
     try {
       const blob = await response.blob();
-      const text = await blob.text(); 
+      const text = await blob.text();
       const json = JSON.parse(text);
       if (json.err_code) {
         throw new Error(json.err_code)
@@ -85,13 +81,28 @@ export class ServerApi {
   }
   public static async uploadImage(body: FormData|FormDataEntryValue):
       Promise<{img_id: string}> {
-    return await ServerApi.post(
-        ServerApi.url + '/upload-image', body, {});
+    return await ServerApi.post(ServerApi.url + '/upload-image', body, {});
   }
   public static async updateUser(body: URLSearchParams): Promise<{}> {
     return await ServerApi.post(ServerApi.url + '/update-user', body);
   }
-  public static async getImage(id: number): Promise<DataBaseImageInstance> {
+  public static async deleteImage(id: number) {
+    const body: RequestBodyInstance = new Map();
+    body.set('id', id);
+    return await ServerApi.get(ServerApi.url + `/delete-image`, body);
+  }
+  public static async deleteUser(id: number) {
+    const body: RequestBodyInstance = new Map();
+    body.set('id', id);
+    return await ServerApi.get(ServerApi.url + `/delete-user`, body);
+  }
+  public static async deleteInstrument(id: number) {
+    const body: RequestBodyInstance = new Map();
+    body.set('id', id);
+    return await ServerApi.get(ServerApi.url + `/delete-instrument`, body);
+  }
+  public static async getImage(id: number):
+      Promise<DataBaseImageInstance> {
     const map: RequestBodyInstance = new Map();
     map.set('id', id);
     return await ServerApi.get(ServerApi.url + '/image', map);
