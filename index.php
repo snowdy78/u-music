@@ -215,5 +215,14 @@
         public function findImages(array $image_data, MatchType $match) {
             return $this->findData('images', $image_data, $match);
         }
+        public function deleteUser(int $id) {
+            $this->handleRequest($this->query("DELETE FROM `users` WHERE id=$id"));
+        }
+        public function deleteInstrument(int $id) {
+            $this->handleRequest($this->query("DELETE FROM `instruments` WHERE id=$id"));
+        }
+        public function deleteImage(int $id) {
+            $this->handleRequest($this->query("DELETE FROM `images` WHERE id=$id"));
+        }
     };
 ?>
