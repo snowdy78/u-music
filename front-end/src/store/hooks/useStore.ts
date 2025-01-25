@@ -29,11 +29,10 @@ export function useStore(): IMainStorage {
         instruments: InstrumentStore.create({}),
     });
     if (user_json) {
-        ServerApi.getUser(user_json.id).then(user => {
-            if (sessionStorage.getItem('authorized-user') === null) 
+        ServerApi.getUser({id: +user_json.id}).then(user => {
+            if (!sessionStorage.getItem('authorized-user')) 
                 return;
             const user_json = JSON.parse(sessionStorage.getItem('authorized-user') as string);
-            
             if (user.id === user_json.id 
                 && user.email === user_json.email 
                 && user.login === user_json.login
