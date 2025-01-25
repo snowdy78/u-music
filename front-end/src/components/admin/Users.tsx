@@ -80,7 +80,7 @@ export function UsersRouting({name, header, ...props}: ContentComponentProps): R
                                     {user.password}
                                 </div>
                                 <div>
-                                    {user.is_admin ? 'Admin' : 'User'}
+                                    {+user.is_admin === 1 ? 'Admin' : 'User'}
                                 </div>
                                 <div>
                                     {user.img_id ? 'Has' : 'No'}

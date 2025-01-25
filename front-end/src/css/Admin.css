@@ -62,7 +62,7 @@
 
 .instrument__row {
     display: grid;
-    grid-template-columns: 1em repeat(5, 1fr) 2em 2em;
+    grid-template-columns: 3em auto 8em 8em 8em 8em 2em 2em;
     height: 3em;
     flex-direction: row;
     border-right: 1px solid var(--black);

@@ -20,6 +20,7 @@ import { Admin } from "./components/admin/Admin"
 import { InstrumentEdit } from "./components/admin/InstrumentEdit"
 import { InstrumentAdd } from "./components/admin/InstrumentAdd"
 import { Error401Page } from "./components/Error401Page"
+import { UserEdit } from "./components/admin/UserEdit"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -52,6 +53,9 @@ createRoot(document.getElementById('root')!).render(
           />
           <Route path="/admin" 
             Component={() => <Admin />}
+          />
+          <Route path="/admin/user-edit/:id"
+            Component={() => <UserEdit/>}
           />
           <Route path="/admin/instrument-add"
             Component={() => <InstrumentAdd />}
