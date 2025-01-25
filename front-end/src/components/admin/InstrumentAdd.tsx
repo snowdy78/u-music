@@ -73,35 +73,24 @@ export function InstrumentAdd() {
             return;
         }
         const form = event.target as HTMLFormElement;
-        const formData = new FormData(form);
-        const instrument_data = new URLSearchParams();
-
-        const img = formData.get('image') as File;
-        const image_data = new FormData();
-        image_data.append('image', img);
-        let image_id: string | undefined;
+        const form_data = new FormData(form);
         try {
-            image_id = (await ServerApi.uploadImage(image_data)).img_id;
+            await ServerApi.actionWithImageUpload(
+                form_data, 
+                'image', 
+                async (instrument_data: URLSearchParams) => {
+                    try {
+                        await ServerApi.addInstrument(instrument_data);
+                        setError('');
+                        setSuccess("Инструмент успешно добавлен");
+                    } catch (e: any) {
+                        setError(e.message);
+                        setSuccess('');
+                    }
+                }
+            );
         } catch (err: any) {
-            console.error(err);
             setError(err.message);
-            return;
-        }
-        const except = ['image'];
-
-        formData.forEach((value, key) => {
-            if (except.find(item => item === key) !== undefined)
-                return;
-            instrument_data.append(key, value.toString());
-        });
-        instrument_data.append('img_id', JSON.stringify(image_id));
-        try {
-            await ServerApi.addInstrument(instrument_data);
-            setError('');
-            setSuccess("Инструмент успешно добавлен");
-        } catch (e: any) {
-            setError(e.message);
-            setSuccess('');
         }
     }
     return (

@@ -135,4 +135,26 @@ export class ServerApi {
     map.set('is_admin', body.is_admin);
     return await ServerApi.get(ServerApi.url + '/user', map);
   }
+  public static async actionWithImageUpload(
+    form_data: FormData,
+    image_key: string,
+    action: (without_img_data: URLSearchParams, img_id?: string) => Promise<void>
+  ) {
+    const image_data = new FormData();
+    let img_id: string | undefined;
+    const img = form_data.get('image');
+    if (img && (img as File).size !== 0) {
+      image_data.append(image_key, form_data.get(image_key) as File);
+      img_id = (await ServerApi.uploadImage(image_data)).img_id;
+    }
+    form_data.delete(image_key);
+    if (img_id !== undefined) {
+      form_data.set('img_id', JSON.stringify(img_id));
+    }
+    const search_url = new URLSearchParams();
+    form_data.forEach((value, key) => {
+      search_url.append(key, value.toString());
+    });
+    return action(search_url);
+  }
 }

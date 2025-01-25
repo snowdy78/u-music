@@ -27,6 +27,7 @@ export function Instruments({name, header, ...props}: ContentComponentProps): Re
         store.instruments.eraseById(id);
         if (!instruments) return;
         instruments.splice(instruments.findIndex((instrument) => instrument.id === id), 1);
+        setInstruments([...instruments]);
     }
     function onInstrumentEdit(id: number) {
         window.location.href = `admin/instrument-edit/${id}`;

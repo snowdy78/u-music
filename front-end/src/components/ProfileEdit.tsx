@@ -68,13 +68,19 @@ export function ProfileEdit() {
             name: 'password',
             type: 'password',
             className: 'input_password',
-            validate: (data: string) => data.length >= 8 || data.length === 0,
+            validate: (data: string) => {
+                const password = document.querySelector('.input_repeat-password') as HTMLInputElement;
+                const valid = data.length >= 8;
+                password_is_valid.current = valid && password.value === data;
+                return valid;
+            },
             onPass,
             onFail
         },
         {
             placeholder: "Повторите пароль",
             name: 'password_repeat',
+            className: 'input_repeat-password',
             type: 'password',
             validate: (data: string) => {
                 const password = document.querySelector('.input_password') as HTMLInputElement;
@@ -87,54 +93,51 @@ export function ProfileEdit() {
         },
     ];
     async function onSubmit(event: React.ChangeEvent<HTMLFormElement>) {
+        event.preventDefault();
         if (!store.authorized_user) {
             window.location.href = '/auth';
             return;
         }
-        event.preventDefault();
-        const form = event.target as HTMLFormElement;
-        const formData = new FormData(form);
         if (!password_is_valid.current) {
             setError('Пароли не совпадают');
             return;
         }
-        const user_data = new URLSearchParams();
-        user_data.append('id', store.authorized_user.id);
-        let image_id: string | undefined;
-        const img = formData.get('image');
-        if (img && (img as File).size !== 0) {
-            const image_data = new FormData();
-            image_data.append('image', img as File);
-            image_id = (await ServerApi.uploadImage(image_data)).img_id;
-        }
-        const user_array_data: any = {
-            ...store.authorized_user,
-        };
-        const except = ['password_repeat', 'image'];
-        formData.forEach((value, key) => {
-            if (except.find(item => item === key) !== undefined || value === '' || value.toString() === user_array_data[key])
-                return;
-            user_data.append(key, value.toString());
-        });
-        if (image_id !== undefined)
-            user_data.append('img_id', JSON.stringify(image_id));
-        if (user_data.size === 1) {
-            setError("Пожалуйста измените данные");
-            return;
-        }
-        try {
-            await ServerApi.updateUser(user_data);
-            const user_json = await ServerApi.getUser({id: +store.authorized_user.id});
-            sessionStorage.removeItem('authorized-user');
-            sessionStorage.setItem('authorized-user', JSON.stringify({
-                ...user_json,
-            }));
-            setError('');
-            setSuccess("Данные успешно обновлены");
-        } catch (e: any) {
-            setError(e.message);
-            setSuccess('');
-        }
+        const form = event.target as HTMLFormElement;
+        const formData = new FormData(form);
+        await ServerApi.actionWithImageUpload(
+            formData, 
+            'image', 
+            async (user_data: URLSearchParams) => {
+                if (!store.authorized_user) {
+                    return;
+                }
+                user_data.delete('password_repeat');
+                user_data.forEach((value, key) => {
+                    if (value !== '') {
+                        return;
+                    }
+                    user_data.delete(key);
+                });
+                if (user_data.size === 1) {
+                    setError("Пожалуйста измените данные");
+                    return;
+                }
+                user_data.append('id', store.authorized_user.id);
+                try {
+                    await ServerApi.updateUser(user_data);
+                    const user_json = await ServerApi.getUser({id: +store.authorized_user.id});
+                    sessionStorage.removeItem('authorized-user');
+                    sessionStorage.setItem('authorized-user', JSON.stringify({
+                        ...user_json,
+                    }));
+                    setError('');
+                    setSuccess("Данные успешно обновлены");
+                } catch (e: any) {
+                    setError(e.message);
+                    setSuccess('');
+                }
+            }
+        );
     }
     return (
         <AuthorizedPage>

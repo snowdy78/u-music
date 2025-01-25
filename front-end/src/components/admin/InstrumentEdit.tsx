@@ -70,47 +70,37 @@ export function InstrumentEdit() {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const formData = new FormData(form);
-        const instrument_data = new URLSearchParams();
-        if (params.id === undefined) {
-            return;
-        }
-        instrument_data.append('id', params.id);
-        let image_id: string | undefined;
-        const img = formData.get('image');
-        if (img && (img as File).size !== 0) {
-            const image_data = new FormData();
-            image_data.append('image', img as File);
-            image_id = (await ServerApi.uploadImage(image_data)).img_id;
-        }
-        const except = ['password_repeat', 'image'];
-        formData.forEach((value, key) => {
-            if (except.find(item => item === key) !== undefined || value === '')
-                return;
-            instrument_data.append(key, value.toString());
-        });
-        if (image_id !== undefined)
-            instrument_data.append('img_id', JSON.stringify(image_id));
-        if (instrument_data.size === 1) {
-            setError("Пожалуйста измените данные");
-            return;
-        }
-        try {
-            await ServerApi.updateInstrument(instrument_data);
-            const instrument = await ServerApi.getInstrument(+params.id);
-            setInstrumentData(Instrument.create({
-                id: +instrument.id,
-                model_name: instrument.model_name,
-                category: instrument.category,
-                price: +instrument.price,
-                in_stock: +instrument.in_stock,
-                img_id: instrument.img_id === null ? null : +instrument.img_id
-            }))
-            setError('');
-            setSuccess("Данные успешно обновлены");
-        } catch (e: any) {
-            setError(e.message);
-            setSuccess('');
-        }
+        await ServerApi.actionWithImageUpload(
+            formData,
+            'image',
+            async (form_data_without_image: URLSearchParams) => {
+                if (params.id === undefined) {
+                    return;
+                }
+                if (form_data_without_image.size === 1) {
+                    setError('Пожалуйста измените данные');
+                    return;
+                }
+                form_data_without_image.append('id', params.id);
+                try {
+                    await ServerApi.updateInstrument(form_data_without_image);
+                    const instrument = await ServerApi.getInstrument(+params.id);
+                    setInstrumentData(Instrument.create({
+                        id: +instrument.id,
+                        model_name: instrument.model_name,
+                        category: instrument.category,
+                        price: +instrument.price,
+                        in_stock: +instrument.in_stock,
+                        img_id: instrument.img_id === null ? null : +instrument.img_id
+                    }))
+                    setError('');
+                    setSuccess("Данные успешно обновлены");
+                } catch (e: any) {
+                    setError(e.message);
+                    setSuccess('');
+                }
+            }
+        );
     } 
     return (
         <AdministratedPage>
