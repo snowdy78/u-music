@@ -90,10 +90,10 @@
             $query = "INSERT INTO instruments (id, ".implode(', ', array_keys($instrument)).") 
                 VALUES(DEFAULT, ".implodeToSqlData(', ', $instrument).")";
             $this->handleRequest($this->query($query));
-            $query = $this->query(
+            $request = $this->query(
                 "SELECT LAST_INSERT_ID();"
             );
-            $request = $this->query($query);
+            $this->handleRequest($request);
             return +$request->fetch_assoc()['LAST_INSERT_ID()'];
         }
         public function updateInstrument(array $instrument_data) {
