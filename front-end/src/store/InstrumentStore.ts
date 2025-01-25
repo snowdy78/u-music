@@ -25,7 +25,7 @@ export const InstrumentStore =
             self.instruments.clear();
         },
         insert(instrument: DataBaseInstrumentInstance) {
-            self.instruments.push(Instrument.create(instrument));
+            self.instruments.push(Instrument.create({...instrument, img_data: null}));
         },
         eraseById(id: number) {
             self.instruments.splice(self.instruments.findIndex(instrument => instrument.id === id), 1);

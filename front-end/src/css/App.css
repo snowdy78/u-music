@@ -16,6 +16,9 @@
   width: 100%;
   min-height: 100vh;
 }
+.btn {
+  transition: background-color 0.15s;
+}
 .color-primary {
   color: var(--primary);
 }
@@ -31,6 +34,17 @@
 body {
   margin: 0;
   padding: 0;
+}
+input {
+  position: relative;
+  padding: 8px 10px;
+}
+input::file-selector-button {
+  width: 50%;
+  height: 100%;
+  border: 0;
+  border-radius: 5px;
+  background-color: var(--dark-grey);
 }
 img {
   max-width: 100%;
@@ -66,6 +80,9 @@ header a:hover {
   color: var(--white);
 }
 
+.container {
+  margin: 1%;
+}
 header .basket { 
   width: 50%;
   height: 50%;

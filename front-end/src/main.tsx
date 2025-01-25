@@ -18,6 +18,7 @@ import { Error404Page } from "./components/Error404Page"
 import { ProfileEdit } from "./components/ProfileEdit"
 import { Admin } from "./components/admin/Admin"
 import { InstrumentEdit } from "./components/admin/InstrumentEdit"
+import { InstrumentAdd } from "./components/admin/InstrumentAdd"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -41,16 +42,19 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/profile"
             Component={() => <Profile/>}
           />
+          <Route path="/basket"/>
           <Route path="/profile/edit"
             Component={() => <ProfileEdit/>}
           />
           <Route path="/admin" 
             Component={() => <Admin />}
           />
+          <Route path="/admin/instrument-add"
+            Component={() => <InstrumentAdd />}
+          />
           <Route path="/admin/instrument-edit/:id"
             Component={() => <InstrumentEdit />}
           />
-          <Route path="/basket"/>
           <Route path="/instrument/:id" 
             Component={() => <InstrumentPage/>}
           />

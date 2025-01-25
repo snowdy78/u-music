@@ -58,7 +58,13 @@ export class ServerApi {
     try {
       const blob = await response.blob();
       const text = await blob.text();
-      const json = JSON.parse(text);
+      let json: any;
+      try {
+        json = JSON.parse(text);
+      } catch(err: any) {
+        console.error(text);
+        throw new Error(err.message);
+      }
       if (json.err_code) {
         throw new Error(json.err_code)
       };
@@ -79,9 +85,15 @@ export class ServerApi {
   public static async postRegisterUser(body: URLSearchParams): Promise<{}> {
     return await ServerApi.post(ServerApi.url + '/user-register', body);
   }
+  public static async addInstrument(body: URLSearchParams): Promise<{id: number}> {
+    return await ServerApi.post(ServerApi.url + '/add-instrument', body);
+  }
   public static async uploadImage(body: FormData|FormDataEntryValue):
-      Promise<{img_id: string}> {
+  Promise<{img_id: string}> {
     return await ServerApi.post(ServerApi.url + '/upload-image', body, {});
+  }
+  public static async updateInstrument(body: URLSearchParams): Promise<{}> {
+    return await ServerApi.post(ServerApi.url + '/update-instrument', body);
   }
   public static async updateUser(body: URLSearchParams): Promise<{}> {
     return await ServerApi.post(ServerApi.url + '/update-user', body);

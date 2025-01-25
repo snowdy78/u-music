@@ -14,6 +14,16 @@
     border-bottom: 1px solid var(--black);
     transition: border-bottom-width 0.15s;
 }
+.admin button {
+    border-radius: 6px;
+    padding: 4px 13px;
+}
+.admin .btn.add-instrument {
+    background-color: var(--primary) !important;
+}
+.admin .btn.add-instrument:hover {
+    background-color: color-mix(in srgb, var(--primary) 90%, black) !important;
+}
 .route {
     cursor: pointer;
     user-select: none;

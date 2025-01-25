@@ -1,19 +1,24 @@
 import { Instrument } from "./Instrument";
 import { useStore } from "../store/hooks/useStore";
 import React from "react";
-import { IInstrumentStore } from "../store/InstrumentStore";
+import { IInstrument } from "../store/Instrument";
 
 export function Catalog() {
     const store = useStore();
-    const [instruments, setInstruments] = React.useState<IInstrumentStore | null>(null);
+    const [instruments, setInstruments] = React.useState<IInstrument[] | null>(null);
     React.useEffect(() => {
-        store.loadInstruments().then(() => {
-            store.instruments.forEach((instrument, _) => {
+        store.loadInstruments().then(async () => {
+            const array = store.instruments.getArray();
+            for (const instrument of array) {
                 if (instrument.hasImg()) {
-                    instrument.loadImgData().catch(rejection => console.error('img not loaded: ' + rejection.message));
+                    try {
+                        await instrument.loadImgData();
+                    } catch(err: any) {
+                        console.error('img not loaded: ' + err.message)
+                    }
                 }
-            });
-            setInstruments(store.instruments);
+            }
+            setInstruments([...array]);
         }).catch(rejection => console.error('instruments not loaded: ' + rejection.message));
     }, []);
     return (

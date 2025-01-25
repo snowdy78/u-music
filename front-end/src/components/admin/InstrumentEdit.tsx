@@ -5,24 +5,19 @@ import { ServerApi } from "../../server-api";
 import { useParams } from "react-router";
 import { EInstrumentCategory, IInstrument, Instrument } from "../../store/Instrument";
 import { Instrument as InstrumentComponent } from "../Instrument";
-
-function arrayCategories() {
-    const categories = [];
-    for (let category in EInstrumentCategory) {
-        categories.push({value: category});
-    }
-    return categories;
-}
+import { arrayCategories } from "./Instruments";
 
 export function InstrumentEdit() {
     const params = useParams<{id: string}>();
+    const [error, setError] = React.useState<string>("");
+    const [success, setSuccess] = React.useState<string>("");
     const [instrument_data, setInstrumentData] = React.useState<IInstrument | null>(null);
     const [image_data, setImageData] = React.useState<string>("");
     const fields = [
         {
             name: 'image',
             type: 'file',
-            validate: (data: string) => true,
+            validate: (_: string) => true,
         },
         {
             name: 'model_name',
@@ -40,7 +35,7 @@ export function InstrumentEdit() {
         },
         {
             name: 'in_stock',
-            placeholder: 'в наличии',
+            placeholder: 'В наличии',
             type: 'number',
             value: instrument_data?.in_stock,
             validate: (data: string) => data.length > 0
@@ -73,6 +68,49 @@ export function InstrumentEdit() {
     }, []);
     async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const instrument_data = new URLSearchParams();
+        if (params.id === undefined) {
+            return;
+        }
+        instrument_data.append('id', params.id);
+        let image_id: string | undefined;
+        const img = formData.get('image');
+        if (img && (img as File).size !== 0) {
+            const image_data = new FormData();
+            image_data.append('image', img as File);
+            image_id = (await ServerApi.uploadImage(image_data)).img_id;
+        }
+        const except = ['password_repeat', 'image'];
+        formData.forEach((value, key) => {
+            if (except.find(item => item === key) !== undefined || value === '')
+                return;
+            instrument_data.append(key, value.toString());
+        });
+        if (image_id !== undefined)
+            instrument_data.append('img_id', JSON.stringify(image_id));
+        if (instrument_data.size === 1) {
+            setError("Пожалуйста измените данные");
+            return;
+        }
+        try {
+            await ServerApi.updateInstrument(instrument_data);
+            const instrument = await ServerApi.getInstrument(+params.id);
+            setInstrumentData(Instrument.create({
+                id: +instrument.id,
+                model_name: instrument.model_name,
+                category: instrument.category,
+                price: +instrument.price,
+                in_stock: +instrument.in_stock,
+                img_id: instrument.img_id === null ? null : +instrument.img_id
+            }))
+            setError('');
+            setSuccess("Данные успешно обновлены");
+        } catch (e: any) {
+            setError(e.message);
+            setSuccess('');
+        }
     } 
     return (
         <AdministratedPage>
@@ -92,6 +130,7 @@ export function InstrumentEdit() {
                         fields={fields}
                         onValidationFail={() => {}}
                         onValidationPass={() => {}}
+                        encType="multipart/form-data"
                         onSubmit={onSubmit}
                     >
                         <button type="submit">
@@ -104,6 +143,12 @@ export function InstrumentEdit() {
                                 .map(category => <option key={category.value} value={category.value}/>)
                         }
                     </datalist>
+                    {
+                        error && <div className='fail-field'>{error}</div>
+                    }
+                    {
+                        success && <div className='pass-field'>{success}</div>
+                    }
                 </div>
             </div>
         </AdministratedPage>

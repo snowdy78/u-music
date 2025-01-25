@@ -1,8 +1,17 @@
 import React from 'react';
 import { useStore } from '../../store/hooks/useStore';
 import { ContentComponentProps } from "./Admin";
-import { IInstrument } from "../../store/Instrument";
+import { EInstrumentCategory, IInstrument } from "../../store/Instrument";
 import { ServerApi } from "../../server-api";
+
+export function arrayCategories() {
+    const categories = [];
+    for (let category in EInstrumentCategory) {
+        categories.push({value: category});
+    }
+    return categories;
+}
+
 
 export function Instruments({name, header, ...props}: ContentComponentProps): React.JSX.Element {
     const store = useStore();
@@ -23,13 +32,21 @@ export function Instruments({name, header, ...props}: ContentComponentProps): Re
         window.location.href = `admin/instrument-edit/${id}`;
     }
     return (
-        <div className='admin-instruments'>
+        <div className='container admin-instruments'>
             <h3
                 {...props}
             >
                 {header}
             </h3>
-            <div className='admin-instruments__content'>
+            <div className='container admin-instruments__content'>
+                <div className="container" style={{ textAlign: 'right' }}>
+                    <button 
+                        className='btn add-instrument'
+                        onClick={() => window.location.href = `admin/instrument-add`}
+                    >
+                        +
+                    </button>
+                </div>
                 <div className='instrument__row' style={{ borderBottom: '1px solid var(--black)'}}>
                     <div className='admin-instrument__field' >
                         ID
