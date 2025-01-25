@@ -19,6 +19,7 @@ import { ProfileEdit } from "./components/ProfileEdit"
 import { Admin } from "./components/admin/Admin"
 import { InstrumentEdit } from "./components/admin/InstrumentEdit"
 import { InstrumentAdd } from "./components/admin/InstrumentAdd"
+import { Error401Page } from "./components/Error401Page"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -29,6 +30,9 @@ createRoot(document.getElementById('root')!).render(
           />
           <Route path="/404"
             Component={() => <Error404Page />}
+          />
+          <Route path="/401"
+            Component={() => <Error401Page />}
           />
           <Route path="/catalog" 
             Component={() => <CatalogPage />} 
