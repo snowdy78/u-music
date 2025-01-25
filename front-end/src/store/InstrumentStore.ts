@@ -1,4 +1,4 @@
-import { types, Instance } from "mobx-state-tree";
+import { types, Instance, flow } from "mobx-state-tree";
 import { Instrument, IInstrument } from "./Instrument";
 import { DataBaseInstrumentInstance } from "../server-api";
 
@@ -39,6 +39,13 @@ export const InstrumentStore =
         forEach(callback: (instrument: IInstrument, index: number) => void) {
             self.instruments.forEach(callback);
         },
+        loadImages: flow(function *() {
+            for (let i = 0; i < self.instruments.length; i++) {
+                if (self.instruments[i].hasImg()) {
+                    yield self.instruments[i].loadImgData();
+                }
+            }
+        }),
     }));
 
 export interface IInstrumentStore extends Instance<typeof InstrumentStore> {}

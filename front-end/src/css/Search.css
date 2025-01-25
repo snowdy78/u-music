@@ -45,10 +45,14 @@
 .search__input:focus {
     outline: none;
 }
+.search__result-list a {
+    text-decoration: none;
+    color: var(--white);
+}
 .search__result-list {
     position: absolute;
     width: calc(100% + 2*var(--search-side-borders));
-    left: calc(-1* var(--search-side-borders));
+    left: calc(-1 * var(--search-side-borders));
     top: calc(var(--search-bar-height)/2);
     height: fit-content;
     background-color: var(--primary);

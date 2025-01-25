@@ -24,10 +24,7 @@ export function IndexContent() {
                         Барабаны
                     </div>
                     <div>
-                        Скрипки
-                    </div>
-                    <div>
-                        Виолончели
+                        Духовые
                     </div>
                 </CatalogButton>
                 <InstrumentSearch />

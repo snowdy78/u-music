@@ -14,7 +14,7 @@ export function UserEdit() {
             return;
         ServerApi.getUser({id: +params.id})
             .then(setUser)
-            .catch(err => {
+            .catch(_ => {
                 window.location.href = '/404';
             });
     }, []);

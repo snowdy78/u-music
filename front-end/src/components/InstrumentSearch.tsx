@@ -1,6 +1,7 @@
 import '@css/Search.css'
 import '@css/App.css'
 import React from 'react'
+import { Link } from "react-router-dom";
 
 export type Searchable = {
     name: string;
@@ -48,9 +49,9 @@ export function InstrumentSearch({ search_list }: InstrumentSearchProps) {
                     {
                         results.current.map(
                             (item, index) =>
-                                <div key={index}>
+                                <div key={`search:`+index}>
                                     <img src="./src/assets/icons/search-white.svg" className='icon' alt="" />
-                                    <a href={item.href}>{item.name}</a>
+                                    <Link to={item.href}>{item.name}</Link>
                                 </div>
                         )
                     }

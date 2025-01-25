@@ -66,6 +66,9 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/instrument/:id" 
             Component={() => <InstrumentPage/>}
           />
+          <Route path="/catalog?category=:category"
+            Component={() => <CatalogPage/>}
+          />
       </Routes>
   </BrowserRouter>
   </StrictMode>,
