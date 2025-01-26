@@ -1,7 +1,7 @@
 import React from 'react'
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
 
-export type InputProps = React.RefAttributes<HTMLInputElement> & React.InputHTMLAttributes<HTMLInputElement>;
+export type InputProps = React.RefAttributes<HTMLInputElement> & React.HTMLProps<HTMLInputElement>;
 export type ValidationFieldProps = {
     validate: (data: string) => boolean;
     onFail?: (data: ChangeEvent) => void;
@@ -28,7 +28,7 @@ export function ValidationField({
     return (
         <div className='validation-field__container'>
             <input
-                {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
+                {...props}
                 className={`validation-field__input` + (className === undefined ? "" : " " + className)}
                 value={inputValue === null ? value : undefined}
                 onChange={(event: ChangeEvent) => {

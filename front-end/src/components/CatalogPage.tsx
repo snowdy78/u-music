@@ -12,17 +12,12 @@ import { Link, useSearchParams } from "react-router"
 import { IInstrument } from "../store/Instrument.ts"
 
 export function CatalogPage() {
-  const [search_params, _] = useSearchParams();
+  const [search_params, setSearchParams] = useSearchParams();
   const store = useStore();
   const [instruments, setInstruments] = React.useState<IInstrument[]>([]);
   const [search_list, setSearchList] = React.useState<Searchable[]>([]);
   const [filters, setFilters] = React.useState<Filters>({
-    filter: (value: IInstrument) => {
-      console.log(value.category, search_params.get('category'));
-      return search_params.get('category') === undefined ? true : (
-        value.category.toLowerCase() === search_params.get('category')?.toLowerCase()
-      );
-    }
+    filter: () => true,
   });
   React.useEffect(() => {
     store.loadInstruments().then(
@@ -34,26 +29,46 @@ export function CatalogPage() {
         })
         setSearchList([...list]);
         setInstruments([...store.instruments.getArray()]);
+        setFilters({
+          filter: (value: IInstrument) => {
+            return search_params.get('category') === null ? true : (
+              value.category.toLowerCase() === search_params.get('category')?.toLowerCase()
+            );
+          }
+        });
       }
     )
-  }, []);
+  }, [search_params]);
+  function onLinkClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.stopPropagation();
+    const rgx = /[a-z]+$/gmi;
+    const matching = e.currentTarget.href.match(rgx);
+    if (matching) {
+      const category = matching.at(0);
+      if (category) {
+        const params = new URLSearchParams();
+        params.set('category', category);
+        setSearchParams(params);
+      }
+    }
+  }
   return <StrictMode>
       <ClientPage>
         <div className="index-intro">
           <CatalogButton>
-            <Link to="/catalog?category=guitar">
+            <Link to="/catalog?category=guitar" onClick={onLinkClick}>
                 Гитары
             </Link>
-            <Link to="/catalog?category=bass" state={{category: 'bass'}}>
+            <Link to="/catalog?category=bass" onClick={onLinkClick}>
                 Бас-гитары
             </Link>
-            <Link to="/catalog?category=piano" state={{category: 'piano'}}>
+            <Link to="/catalog?category=piano" onClick={onLinkClick}>
                 Пианино
             </Link>
-            <Link to="/catalog?category=drums" state={{category: 'drums'}}>
+            <Link to="/catalog?category=drums" onClick={onLinkClick}>
                 Барабаны
             </Link>
-            <Link to="/catalog?category=trumpet" state={{category: 'trumpet'}}>
+            <Link to="/catalog?category=trumpet" onClick={onLinkClick}>
                 Духовые
             </Link>
           </CatalogButton>
