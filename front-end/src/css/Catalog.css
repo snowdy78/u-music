@@ -55,3 +55,46 @@
 .catalog-dropdown-list__open > .catalog-dropdown-list__items > *:hover {
     background-color: color-mix(in srgb, var(--primary) 80%, white 20%);
 }
+
+.catalog__filters {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.catalog__filters__btn-submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background-color: var(--primary);
+    font-size: 0.7em;
+}
+.catalog__filters > * {
+    display: flex;
+    padding: 0 10px;
+    margin: 10px 0;
+}
+.catalog__filters > *:not(:last-child) {
+    border-right: 1px solid var(--primary);
+}
+.catalog__filters select {
+    color: var(--black);
+    border: 1px solid var(--dark-grey);
+    background-color: var(--light-grey);
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+.catalog__filters input {
+    color: var(--black);
+    width: 6ch;
+    border: 1px solid var(--dark-grey);
+    background-color: var(--light-grey);
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+.catalog__filters input::placeholder {
+    color: var(--dark-grey);
+}
+.catalog__filters input:focus, .catalog__filters select:focus {
+    outline: none;
+}

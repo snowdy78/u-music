@@ -1,8 +1,11 @@
 import { Instrument } from "./Instrument";
-import { IInstrument } from "../store/Instrument";
+import { EInstrumentCategory, IInstrument } from "../store/Instrument";
 
 export type Filters = {
-    filter: (value: IInstrument) => boolean;
+    category_filter?: (value: EInstrumentCategory) => boolean;
+    model_name_filter?: (value: string) => boolean;
+    price_filter?: (value: number) => boolean;
+    stock_filter?: (value: number) => boolean;
 };
 
 export type CatalogProps = {
@@ -16,10 +19,26 @@ export function Catalog({ filters, instruments }: CatalogProps) {
             {
                 instruments.map(
                     (
-                        value, 
+                        value,
                         key
                     ) => {
-                        if (!filters || filters.filter(value)) {
+                        let satisfies = true;
+                        const filter_attrs = {
+                            category_filter: value.category,
+                            model_name_filter: value.model_name,
+                            price_filter: value.price,
+                            stock_filter: value.in_stock
+                        };
+                        Object.keys(filters || {}).forEach(
+                            (key: string, _: number) => {
+                                if (filters) {
+                                    const filter = filters[key as keyof Filters];
+                                    const arg = filter_attrs[key as keyof Filters] as never;
+                                    satisfies = satisfies && (filter === undefined || filter(arg));
+                                }
+                            }
+                        )
+                        if (satisfies) {
                             return (
                                 <Instrument
                                     key={`instrument:${key}`}
@@ -31,7 +50,7 @@ export function Catalog({ filters, instruments }: CatalogProps) {
                                 />
                             )
                         }
-                        return <div key={key} style={{display: 'none'}}></div>;
+                        return <div key={key} style={{ display: 'none' }}></div>;
                     }
                 )
             }
