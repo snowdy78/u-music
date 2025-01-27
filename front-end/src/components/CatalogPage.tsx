@@ -7,7 +7,7 @@ import { Searchable } from "./InstrumentSearch.tsx"
 import { Catalog, Filters } from "./Catalog.tsx"
 import '@css/App.css'
 import React from "react"
-import { useStore } from "../store/hooks/useStore.ts"
+import { useStore } from "../store/hooks/useStore"
 import { Link, useSearchParams } from "react-router"
 import { EInstrumentCategory, IInstrument } from "../store/Instrument.ts"
 
@@ -91,7 +91,6 @@ export function CatalogPage() {
     const params = new URLSearchParams();
     form_data.forEach((value, key) => {
       params.set(key, value as string)
-      console.log(key, value);
     });
     setSearchParams(params);
   }

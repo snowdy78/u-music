@@ -3,8 +3,6 @@ import { User } from './User';
 import { DataBaseUserInstance, ServerApi } from "../server-api";
 import { InstrumentStore } from "./InstrumentStore";
 
-
-
 export const MainStorage = 
     types.model('MainStorage', {
         authorized_user: types.maybeNull(User),

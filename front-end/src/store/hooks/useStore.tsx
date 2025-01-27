@@ -1,9 +1,13 @@
+import React from "react";
 import { ServerApi } from "../../server-api";
+import { Basket } from "../Basket";
 import { InstrumentStore } from "../InstrumentStore";
 import { IMainStorage, MainStorage } from "../MainStorage";
 import { IUser, User } from "../User";
+import { create } from "axios";
+import { applySnapshot } from "mobx-state-tree";
 
-export function useStore(): IMainStorage {
+function createStore() {
     let user: IUser | null = null;
     let user_json: any;
     if (sessionStorage.getItem('authorized-user') !== null) {
@@ -15,15 +19,19 @@ export function useStore(): IMainStorage {
                 email: user_json.email,
                 password: user_json.password,
                 is_admin: user_json.is_admin == 0 ? false : true,
-                img_id: user_json.img_id === null ? null : +user_json.img_id
+                img_id: user_json.img_id === null ? null : +user_json.img_id,
+                basket: Basket.create({
+                    user_id: +user_json.id,
+                    ids_of_instruments: [],
+                }),
             });
         } catch (err: any) {
-            console.error(err);
             window.location.href = "/401";
-            
+            console.error(err);
             throw err;
         }
     }
+
     const storage = MainStorage.create({
         authorized_user: user,
         instruments: InstrumentStore.create({}),
@@ -52,4 +60,24 @@ export function useStore(): IMainStorage {
         });
     }
     return storage;
+}
+type StoreContextType = {
+    store: IMainStorage;
+};
+
+export const StoreContext = React.createContext<StoreContextType>({store: createStore()});
+
+type StoreProviderProps = React.PropsWithChildren;
+
+export function StoreProvider({ children }: StoreProviderProps) {
+    const [store] = React.useState(createStore());
+    return (
+        <StoreContext.Provider value={{store}}>
+            {children}
+        </StoreContext.Provider>
+    );
+};
+export function useStore(): IMainStorage {
+    const context = React.useContext<StoreContextType>(StoreContext);
+    return context.store;
 }

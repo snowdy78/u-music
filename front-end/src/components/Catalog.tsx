@@ -11,9 +11,10 @@ export type Filters = {
 export type CatalogProps = {
     filters?: Filters;
     instruments: IInstrument[];
+    onBought?: (instrument: IInstrument) => void;
 };
 
-export function Catalog({ filters, instruments }: CatalogProps) {
+export function Catalog({ filters, instruments, onBought }: CatalogProps) {
     return (
         <div className='catalog'>
             {
@@ -42,11 +43,13 @@ export function Catalog({ filters, instruments }: CatalogProps) {
                             return (
                                 <Instrument
                                     key={`instrument:${key}`}
+                                    iid={value.id}
                                     model_name={value.model_name}
                                     price={value.price}
                                     in_stock={value.in_stock}
                                     image={value.img_data}
                                     type={value.category}
+                                    onBought={() => onBought?.(value)}
                                 />
                             )
                         }

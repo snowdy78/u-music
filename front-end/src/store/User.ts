@@ -1,4 +1,5 @@
 import { types, Instance } from 'mobx-state-tree';
+import { Basket } from "./Basket";
 
 export const User = 
     types.model('User', {
@@ -8,6 +9,7 @@ export const User =
         password: types.string,
         is_admin: types.boolean,
         img_id: types.maybeNull(types.number),
+        basket: types.maybeNull(Basket),
     })
     .actions(self => ({
         setLogin(login: string) {

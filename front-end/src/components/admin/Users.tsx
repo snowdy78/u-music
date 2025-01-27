@@ -11,7 +11,6 @@ export function UsersRouting({name, header, ...props}: ContentComponentProps): R
         ServerApi.getUsers().then(setUsers);
     }, []);
     function deleteUser(id: number) {
-        console.log({...store.authorized_user}, id);
         if (store.authorized_user === null || id === +store.authorized_user.id) {
             setError('You cannot delete yourself');
             setTimeout(async () => {

@@ -31,7 +31,22 @@
 .color-white {
   color: var(--white);
 }
-
+.increment-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  --size: 20px;
+  width: var(--size);
+  height: var(--size);
+  font-size: var(--size);
+  padding: 0;
+  background-color: var(--primary);
+  transition: background-color 0.1s;
+}
+.increment-btn:hover {
+  background-color: color-mix(in srgb, var(--primary) 80%, var(--white));
+}
 .bg-primary {
   background-color: var(--primary);
 }
@@ -109,13 +124,23 @@ header a:hover {
   margin: 1%;
 }
 header .basket { 
+  position: relative;
   width: 50%;
   height: 50%;
   max-height: 100%;
   background: url(../assets/icons/basket-white.svg) no-repeat center;
   background-size: contain;
 }
-
+header .basket .pointer {
+  position: absolute;
+  display: none;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary);
+  border-radius: 50%;
+}
 .hr-indent {
   margin-top: 20px;
   margin-bottom: 20px;

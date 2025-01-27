@@ -21,6 +21,9 @@ export const InstrumentStore =
         },
     }))
     .actions(self => ({
+        filter(filter: (instrument: IInstrument) => boolean) {
+            return self.instruments.filter(filter);
+        },
         find(predicate: (instrument: IInstrument) => boolean) { 
             return self.instruments.find(predicate); 
         },
