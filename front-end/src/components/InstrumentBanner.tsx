@@ -1,13 +1,15 @@
 import { PropsWithChildren, useRef } from 'react'
 import '@css/App.css'
 import '@css/InstrumentBanner.css'
+import { Link } from "react-router";
 
 export interface InstrumentType extends PropsWithChildren {
+    link_to: string;
     background_image: string;
     count?: number;
 }
 
-export function InstrumentBanner({ children, background_image }: InstrumentType) {
+export function InstrumentBanner({ link_to, children, background_image }: InstrumentType) {
     const ref = useRef<HTMLDivElement>(null);
     function handleMouseEnter() {
         if (ref.current) {
@@ -22,10 +24,10 @@ export function InstrumentBanner({ children, background_image }: InstrumentType)
         }
     }
     return (
-        <div className="instrument-banner" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} style={{ backgroundImage: `url('${background_image}')` }}>
+        <Link to={link_to} className="instrument-banner" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} style={{ backgroundImage: `url('${background_image}')` }}>
             <div ref={ref} className='instrument-banner__name'>
                 {children}
             </div>
-        </div>
+        </Link>
     )
 }

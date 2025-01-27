@@ -36,13 +36,13 @@ export function IndexContent() {
             </div>
             <hr />
             <div className='categories'>
-            <InstrumentBanner background_image="./src/assets/guitar.png">
+            <InstrumentBanner link_to="/catalog?category=guitar" background_image="./src/assets/guitar.png">
                 Гитары
             </InstrumentBanner>
-            <InstrumentBanner background_image="./src/assets/drums.png">
+            <InstrumentBanner link_to="/catalog?category=drums" background_image="./src/assets/drums.png">
                 Барабаны
             </InstrumentBanner>
-            <InstrumentBanner background_image="./src/assets/piano.png">
+            <InstrumentBanner link_to="/catalog?category=piano" background_image="./src/assets/piano.png">
                 Пианино
             </InstrumentBanner>
             </div>
