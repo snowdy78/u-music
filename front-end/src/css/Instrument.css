@@ -1,5 +1,4 @@
-.instrument
-{
+.instrument {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,18 +7,18 @@
     height: auto;
     color: black;
     font-size: 1.2rem;
-    background-color: lightgray;
+    background-color: var(--light-grey);
     border-radius: 4px;
     padding: 10px;
+    cursor: default;
 }
-.instrument__image
-{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+.instrument__image {
     width: 100%;
-    height: 100%;
+    height: 350px;
+    background-position: center center;
+    background-clip: content-box;
+    background-size: cover;
+    border-radius: 4px;
 }
 .instrument__name {
     font-size: 1.4rem;
@@ -37,5 +36,6 @@
     line-height: var(--fs);
 }
 .instrument__button {
-
+    background-color: var(--primary);
+    color: var(--white);
 }

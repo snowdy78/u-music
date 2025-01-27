@@ -19,9 +19,7 @@ export function Instrument({model_name, price, in_stock, type, image}: Instrumen
     }
     return (
         <div className="instrument">
-            <div className='instrument__image'>
-                <img src={image ? image : ""} alt="nothing" />
-            </div>
+            <div className='instrument__image' style={{ backgroundImage: image ? `url("${image}")` : ""}}/>
             <div className='instrument__name'>
                 {type}: {model_name}
             </div>
@@ -31,7 +29,7 @@ export function Instrument({model_name, price, in_stock, type, image}: Instrumen
             <div className={`instrument__stock ${in_stock == 0 ? 'color-primary' : ''}`}>
                 В наличии: {in_stock}
             </div>
-            <button className="instrument__button" onClick={handleClick}>
+            <button className="instrument__button bg-primary" onClick={handleClick}>
                 {is_bought ? 'Куплено' : 'Купить'}
             </button>
         </div>
