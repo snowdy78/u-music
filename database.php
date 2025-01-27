@@ -5,6 +5,15 @@
     class UserRegisterError extends Exception {}
 
     class DataBase extends mysqli {
+        private function flowAttributes(array $keys, array $values) {
+            $arr = array();
+            foreach ($keys as $key => $value) {
+                if (isset($values[$value])) {
+                    $arr[$value] = $values[$value];
+                }
+            }
+            return $arr;
+        }
         public function __construct() {
             mysqli::__construct('localhost', 'root', '', 'u_music_app', 3306);
         }
@@ -21,12 +30,15 @@
             }
             return $row;
         }
-        private function findData(string $table_name, array $data, MatchType $match) {
+        private function findData(string $table_name, array $data, MatchType $match, int | null $chunk_start = null, int | null $chunk_end = null) {
             $query = queryWhere(
                 "SELECT * FROM $table_name", 
                 $data, 
                 $match
             );
+            if ($chunk_start !== null && $chunk_end !== null) {
+                $query .= " LIMIT $chunk_start, $chunk_end";
+            }
             return $this->requestToData($this->query($query));
         }
         public function registerUser(string $login, string $email, string $password) {
@@ -152,14 +164,21 @@
             $query = "UPDATE `users` SET ".arrayToEnumString($user_data, ",")." WHERE id=$id";
             $this->handleRequest($this->query($query));
         }
-        public function findUsers(array $user_data, MatchType $match) {
-            return $this->findData('users', $user_data, $match);
+        public function findUsers(array $users, MatchType $match, int | null $chunk_start = null, int | null $chunk_end = null) {
+            $keys = ['id', 'login', 'email', 'password', 'is_admin', 'img_id'];
+            $array = $this->flowAttributes($keys, $users);
+            if (isset($array['password'])) {
+                $array['password'] = sha1($array['password']);
+            }
+            return $this->findData('users', $array, $match, $chunk_start, $chunk_end);
         }
-        public function findInstruments(array $instrument_data, MatchType $match) {
-            return $this->findData('instruments', $instrument_data, $match);
+        public function findInstruments(array $instrument_data, MatchType $match, int | null $chunk_start = null, int | null $chunk_end = null) {
+            $keys = ['id', 'model_name', 'category', 'price', 'img_id', 'in_stock'];
+            return $this->findData('instruments', $this->flowAttributes($keys, $instrument_data), $match, $chunk_start, $chunk_end);
         }
-        public function findImages(array $image_data, MatchType $match) {
-            return $this->findData('images', $image_data, $match);
+        public function findImages(array $image_data, MatchType $match, int | null $chunk_start = null, int | null $chunk_end = null) {
+            $keys = ['id', 'name', 'data', 'type'];
+            return $this->findData('images', $this->flowAttributes($keys, $image_data), $match, $chunk_start, $chunk_end);
         }
         public function deleteUser(int $id) {
             $this->handleRequest($this->query("DELETE FROM `users` WHERE id=$id"));
