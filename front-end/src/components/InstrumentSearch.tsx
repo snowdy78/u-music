@@ -31,6 +31,12 @@ export function InstrumentSearch({ search_list }: InstrumentSearchProps) {
             return;
         }
     }
+    function close(event: React.FocusEvent<HTMLInputElement>) {
+        const result_list = document.querySelector('.search__result-list') as Element;
+        if (!result_list.contains(event.relatedTarget) || result_list === event.relatedTarget) {
+            setResultListVisible(false);
+        }
+    }
     return (
         <div className="search-container">
             <div className="search">
@@ -40,7 +46,7 @@ export function InstrumentSearch({ search_list }: InstrumentSearchProps) {
                     className='search__input'
                     placeholder="Поиск"
                     onFocus={() => setResultListVisible(true)}
-                    onBlur={() => setResultListVisible(false)}
+                    onBlur={close}
                     onChange={updateInputState}
                 />
             </div>
@@ -49,9 +55,9 @@ export function InstrumentSearch({ search_list }: InstrumentSearchProps) {
                     {
                         results.current.map(
                             (item, index) =>
-                                <div key={`search:`+index}>
+                                <div key={`search:`+index} className='result-list__item'>
                                     <img src="./src/assets/icons/search-white.svg" className='icon' alt="" />
-                                    <Link to={item.href}>{item.name}</Link>
+                                    <Link to={item.href} className='result-list__item__link'>{item.name}</Link>
                                 </div>
                         )
                     }

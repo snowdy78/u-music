@@ -77,8 +77,6 @@ export function Instruments({name, header, ...props}: ContentComponentProps): Re
                         instruments.map((instrument, key) => {
                             let style = {};
                             const table_width = 8;
-                            if (key % table_width === table_width - 1)
-                                style = { ...style, borderRight: '1px solid var(--black)' };
                             if (key === instruments.length - 1)
                                 style = { ...style, borderBottom: '1px solid var(--black)' };
                             return (
@@ -108,7 +106,7 @@ export function Instruments({name, header, ...props}: ContentComponentProps): Re
                                             <img className='icon edit-icon' src="/src/assets/icons/edit-white.svg" alt="" />
                                         </button>
                                     </div>
-                                    <div className='admin-instrument__field' style={style}>
+                                    <div className='admin-instrument__field' style={{...style, borderRight: '1px solid var(--black)'}}>
                                         <button className='btn' title='Удалить'
                                             onClick={() => onInstrumentRemove(instrument.id)}
                                         >

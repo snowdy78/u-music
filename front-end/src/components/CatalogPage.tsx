@@ -36,7 +36,7 @@ export function CatalogPage() {
         const list: Searchable[] = [];
         await store.instruments.loadImages();
         store.instruments.forEach((instrument: IInstrument, _) => {
-          list.push({name: instrument.model_name, href: `instrument/${instrument.id}`});
+          list.push({name: instrument.model_name, href: `/instrument/${instrument.id}`});
         })
         setSearchList([...list]);
         setInstruments([...store.instruments.getArray()]);

@@ -21,7 +21,6 @@ export function InstrumentAdd() {
             if (event.target.classList.contains('validation-error'))
                 event.target.classList.remove('validation-error');
             event.target.classList.add('validation-passed');
-            can_be_submitted.current = true
         }
     }
     const fields: ValidationFieldInstance[] = [
@@ -79,6 +78,9 @@ export function InstrumentAdd() {
                 form_data, 
                 'image', 
                 async (instrument_data: URLSearchParams) => {
+                    instrument_data.forEach((value, key) => 
+                        console.log(value)
+                    );
                     try {
                         await ServerApi.addInstrument(instrument_data);
                         setError('');
