@@ -4,8 +4,6 @@ import { Basket } from "../Basket";
 import { InstrumentStore } from "../InstrumentStore";
 import { IMainStorage, MainStorage } from "../MainStorage";
 import { IUser, User } from "../User";
-import { create } from "axios";
-import { applySnapshot } from "mobx-state-tree";
 
 function createStore() {
     let user: IUser | null = null;

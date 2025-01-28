@@ -107,6 +107,7 @@ export function InstrumentEdit() {
             <div className='instrument-edit'>
                 <div className='instrument-edit__left-part'>
                     <InstrumentComponent
+                        iid={instrument_data ? instrument_data.id : -1}
                         model_name={instrument_data ? instrument_data.model_name : ''}
                         price={instrument_data ? instrument_data.price : -1}
                         in_stock={instrument_data ? instrument_data.in_stock : -1}

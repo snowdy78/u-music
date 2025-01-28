@@ -22,10 +22,9 @@ import { InstrumentAdd } from "./components/admin/InstrumentAdd"
 import { Error401Page } from "./components/Error401Page"
 import { UserEdit } from "./components/admin/UserEdit"
 import { Basket } from "./components/Basket"
-import { StoreProvider, useStore } from "./store/hooks/useStore"
+import { StoreProvider } from "./store/hooks/useStore"
 
 function AppComponent() {
-  const store = useStore();
   return (
     <StrictMode>
       <StoreProvider>

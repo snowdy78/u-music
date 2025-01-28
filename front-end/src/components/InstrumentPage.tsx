@@ -30,6 +30,7 @@ export function InstrumentPage() {
                 instrument 
                 ? 
                     <InstrumentComponent 
+                        iid={instrument.id}
                         model_name={instrument.model_name}
                         price={instrument.price}
                         in_stock={instrument.in_stock}
