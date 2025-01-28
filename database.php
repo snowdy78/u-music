@@ -97,7 +97,7 @@
                 $in_stock1 = $i['in_stock'];
                 $in_stock2 = $instrument['in_stock'];
                 $this->handleRequest($this->query("UPDATE instruments SET in_stock=$in_stock1+$in_stock2 WHERE id=$id"));
-                return;
+                return $id;
             } catch (IncorrectRequest) {}
             $query = "INSERT INTO instruments (id, ".implode(', ', array_keys($instrument)).") 
                 VALUES(DEFAULT, ".implodeToSqlData(', ', $instrument).")";
@@ -107,6 +107,58 @@
             );
             $this->handleRequest($request);
             return +$request->fetch_assoc()['LAST_INSERT_ID()'];
+        }
+        public function addOrder(array $order) {
+            if (!isset($order['user_id']) || !isset($order['goods'])) {
+                throw new IncorrectRequest("User id and ids of instruments cannot be empty");
+            }
+            $user_id = +$order['user_id'];
+            try {
+                $goods = json_decode($order['goods'], true);
+            } catch(Exception $err) {
+                throw new IncorrectRequest("('must be json'): ".$err->getMessage());
+            }
+            try {
+                $items = $this->findOrders(['user_id' => $order['user_id']], MatchType::All);
+                $item = $items[0];
+                foreach ($goods as &$value) {
+                    $exist = false;
+                    foreach ($item['goods'] as &$idata) {
+                        if ($idata['id'] === $value['id']) {
+                            $exist = true;
+                            $idata['count'] += $value['count'];
+                        }
+                    }
+                    if (!$exist) {
+                        $item['goods'][] = $value;
+                    }
+                }
+                $item['goods'] = json_encode($item['goods']);
+                $this->updateOrder($item);
+                return $item['id'];
+            } catch (IncorrectRequest) {}
+            $goods = json_encode($goods);
+            $query = "INSERT INTO `orders` (id, user_id, goods) VALUES(DEFAULT, $user_id, '$goods');";
+            $this->handleRequest($this->query($query));
+            $request = $this->query(
+                "SELECT LAST_INSERT_ID();"
+            );
+            $this->handleRequest($request);
+            return +$request->fetch_assoc()['LAST_INSERT_ID()'];
+        }
+        public function updateOrder(array $order) {
+            if (!isset($order['id']) || !isset($order['user_id']) || !isset($order['goods'])) {
+                throw new IncorrectRequest("id and User id and ids of instruments cannot be empty");
+            }
+            $user_id = +$order['user_id'];
+            try {
+                $goods = json_decode($order['goods'], true);
+            } catch(Exception $err) {
+                throw new IncorrectRequest("('must be json'): ".$err->getMessage());
+            }
+            $this->handleRequest($this->query(
+                "UPDATE `orders` SET user_id=$user_id, goods='".json_encode($goods)."' WHERE id=".$order['id']
+            ));
         }
         public function updateInstrument(array $instrument_data) {
             if (!isset($instrument_data['id'])) {
@@ -180,8 +232,19 @@
             $keys = ['id', 'name', 'data', 'type'];
             return $this->findData('images', $this->flowAttributes($keys, $image_data), $match, $chunk_start, $chunk_end);
         }
+        public function findOrders(array $image_data, MatchType $match, int | null $chunk_start = null, int | null $chunk_end = null) {
+            $keys = ['id', 'user_id', 'goods'];
+            $data = $this->findData('orders', $this->flowAttributes($keys, $image_data), $match, $chunk_start, $chunk_end);
+            foreach ($data as $key => &$value) {
+                $value['goods'] = json_decode($value['goods'], true);
+            }
+            return $data;
+        }
         public function deleteUser(int $id) {
             $this->handleRequest($this->query("DELETE FROM `users` WHERE id=$id"));
+        }
+        public function deleteOrder(int $id) {
+            $this->handleRequest($this->query("DELETE FROM `orders` WHERE id=$id"));
         }
         public function deleteInstrument(int $id) {
             $this->handleRequest($this->query("DELETE FROM `instruments` WHERE id=$id"));
