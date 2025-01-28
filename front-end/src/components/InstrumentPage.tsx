@@ -15,11 +15,11 @@ export function InstrumentPage() {
         try {
             const instrument_json = await ServerApi.getInstrument(+id);
             setInstrument(instrument_json);
-            if (typeof instrument_json.img_id === 'number')
-            {
-                const image_json = await ServerApi.getImage(instrument_json.img_id);
-                setImageData(image_json.data);
+            if (instrument_json.img_id === null) {
+                return;
             }
+            const image_json = await ServerApi.getImage(+instrument_json.img_id);
+            setImageData(image_json.data);
         } catch (err) {
             window.location.href = "/404";
         }

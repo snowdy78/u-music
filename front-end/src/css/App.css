@@ -7,6 +7,7 @@
 @import url('Profile.css');
 @import url('Admin.css');
 @import url('InstrumentEdit.css');
+@import url('Basket.css');
 
 :root {
   --header-height: 60px;
@@ -134,10 +135,12 @@ header .basket {
 header .basket .pointer {
   position: absolute;
   display: none;
+  justify-content: center;
+  align-items: center;
   top: 0;
   right: 0;
-  width: 10px;
-  height: 10px;
+  width: 1em;
+  height: 1em;
   background-color: var(--primary);
   border-radius: 50%;
 }
