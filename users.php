@@ -9,9 +9,6 @@
     if (isset($_GET['chunk_end'])) {
         $chunk_end = intval($_GET['chunk_end']);
     }
-    if (!empty($_GET['password'])) {
-        $_GET['password'] = sha1($_GET['password']);
-    }
     try {
         $rows = $db->findUsers($_GET, MatchType::All, $chunk_start, $chunk_end);
     } catch (IncorrectRequest $err) {
