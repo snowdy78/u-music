@@ -2,6 +2,8 @@ import { AdministratedPage } from "../AdministratedPage";
 import React from "react";
 import { Instruments } from "./Instruments";
 import { UsersRouting } from "./Users";
+import { OrdersRouting } from "./Orders";
+import { observer } from "mobx-react-lite";
 export type ContentComponentProps = {
     name: string;
     header: string;
@@ -24,7 +26,7 @@ export function Admin() {
                 header: 'Инструменты',
             },
             ref: React.useRef<Route>(null),
-            ContentComponent: Instruments,
+            ContentComponent: observer(Instruments),
         },
         {
             props: {
@@ -32,7 +34,7 @@ export function Admin() {
                 header: 'Пользователи',
             },
             ref: React.useRef<Route>(null),
-            ContentComponent: UsersRouting,
+            ContentComponent: observer(UsersRouting),
         },
         {
             props: {
@@ -40,7 +42,7 @@ export function Admin() {
                 header: 'Заказы',
             },
             ref: React.useRef<Route>(null),
-            ContentComponent: UsersRouting,
+            ContentComponent: observer(OrdersRouting),
         },
     ];
     type Router = {

@@ -102,3 +102,65 @@
     height: 1em;
     opacity: 0;
 }
+
+.admin__orders {
+    display: grid;
+    grid-auto-flow: row;
+}
+.admin__orders-row {
+    display: grid;
+    height: max-content;
+    width: 100%;
+    grid-template-columns: 3em 8em auto 2em;
+    grid-template-rows: max-content;
+    border: 1px solid var(--black);
+    border-top: 0;
+    border-bottom: 2px solid var(--black);
+}
+.admin__orders .btn {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    height: 2em;
+}
+.orders__goods { 
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    flex-direction: column;
+}
+.orders__goods__good {
+    display: grid;
+    width: 100%;
+    height: 2em;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: max-content;
+
+}
+
+.orders__goods__good > * {
+    width: 100%;
+    height: 2em;
+    border-right: 1px solid var(--black);
+    text-align: center;
+    align-self: center;
+    border-bottom: 1px solid var(--black);
+}
+.orders__goods__good:first-child > * {
+    font-weight: bold;
+}
+.orders__goods__good > *:not(:last-child) {
+    border-left: 1px solid var(--black);
+}
+
+.admin__orders-row:first-child {
+    border-top: 1px solid var(--black);
+}
+.admin__orders-row > * {
+    display: flex;
+    width: 100%;
+    border-right: 1px solid var(--black);
+    justify-content: center;
+    align-items: center;
+}
+

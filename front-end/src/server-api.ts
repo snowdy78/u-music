@@ -21,6 +21,12 @@ export type DataBaseInstrumentInstance = {
 export type DataBaseImageInstance = {
   id: number; name: string; data: string; type: string;
 };
+export type DataBaseOrderInstance = {
+  id: number; 
+  user_id: number;
+  goods: { id: number, count: number }[];
+};
+
 type RequestBodyInstance = Map<string, number|string|boolean|undefined|null>;
 export class ServerApi {
   public static url = 'http://localhost:80/u-music';
@@ -76,6 +82,9 @@ export class ServerApi {
   public static async getInstruments(): Promise<DataBaseInstrumentInstance[]> {
     return await ServerApi.get(ServerApi.url + '/instruments');
   }
+  public static async getOrders(): Promise<DataBaseOrderInstance[]> {
+    return await ServerApi.get(ServerApi.url + '/orders');
+  }
   public static async getUsers(): Promise<DataBaseUserInstance[]> {
     return await ServerApi.get(ServerApi.url + '/users');
   }
@@ -87,6 +96,9 @@ export class ServerApi {
   }
   public static async addInstrument(body: URLSearchParams): Promise<{id: number}> {
     return await ServerApi.post(ServerApi.url + '/add-instrument', body);
+  }
+  public static async addOrder(body: URLSearchParams): Promise<{id: number}> {
+    return await ServerApi.post(ServerApi.url + '/add-order', body);
   }
   public static async uploadImage(body: FormData|FormDataEntryValue):
   Promise<{img_id: string}> {
@@ -108,6 +120,11 @@ export class ServerApi {
     body.set('id', id);
     return await ServerApi.get(ServerApi.url + `/delete-user`, body);
   }
+  public static async deleteOrder(id: number) {
+    const body: RequestBodyInstance = new Map();
+    body.set('id', id);
+    return await ServerApi.get(ServerApi.url + `/delete-order`, body);
+  }
   public static async deleteInstrument(id: number) {
     const body: RequestBodyInstance = new Map();
     body.set('id', id);
@@ -124,6 +141,11 @@ export class ServerApi {
     const map: RequestBodyInstance = new Map();
     map.set('id', id);
     return await ServerApi.get(ServerApi.url + '/instrument', map);
+  }
+  public static async getOrder(id: number): Promise<DataBaseOrderInstance> {
+    const map: RequestBodyInstance = new Map();
+    map.set('id', id);
+    return await ServerApi.get(ServerApi.url + '/instrument', map);  
   }
   public static async getUser(body: DataBaseUserPossibleAttrs):
       Promise<DataBaseUserInstance> {

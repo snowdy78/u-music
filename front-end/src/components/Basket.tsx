@@ -6,6 +6,7 @@ import { IInstrument } from "../store/Instrument";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router";
 import { IBasketInstrument } from "../store/Basket";
+import { ServerApi } from "../server-api";
 
 export type BasketInstrumentProps = {
     bought_count: number;
@@ -134,8 +135,22 @@ export const Basket = observer(function() {
             updateInstruments();
         }
     }
-    function onSubmitOrder() {
-
+    async function onSubmitOrder() {
+        if (!store.authorized_user?.basket) {
+            return;
+        }
+        const cart = store.authorized_user.basket;
+        const params = new URLSearchParams();
+        params.append('user_id', cart.user_id.toString());
+        params.append('goods', JSON.stringify(cart.ids_of_instruments));
+        try {
+            const id = await ServerApi.addOrder(params);
+            setOrderSuccess(`Заказ успешно создан`);
+            setOrderError('')
+        } catch(err: any) {
+            setOrderSuccess('');
+            setOrderError(err.message);
+        }
     }
     return (
         <AuthorizedPage>
@@ -161,22 +176,31 @@ export const Basket = observer(function() {
                             )
                         })}
                     </div>
-                    <div className='basket-grid__total-info'>
-                        <div>
-                            <p>Всего:</p>
-                            <p>Скидки:</p>
-                            <p>НДС:</p>
-                            <p className='total-info__price'>Итого:</p>
+                    <div>
+
+                        <div className='basket-grid__total-info'>
+                            <div>
+                                <p>Всего:</p>
+                                <p>Скидки:</p>
+                                <p>НДС:</p>
+                                <p className='total-info__price'>Итого:</p>
+                            </div>
+                            <div>
+                                <p>{total_price}р.</p>
+                                <p>-{discount}р.</p>
+                                <p>+{vat}р.</p>
+                                <p className='total-info__price'>{total}р.</p>
+                            </div>
+                            <button className='total-info__button' onClick={onSubmitOrder}>
+                                Заказать
+                            </button>
                         </div>
                         <div>
-                            <p>{total_price}р.</p>
-                            <p>-{discount}р.</p>
-                            <p>+{vat}р.</p>
-                            <p className='total-info__price'>{total}р.</p>
+                            {order_success ? <p className='pass-field'>{order_success}</p> : null}
                         </div>
-                        <button className='total-info__button'>
-                            Заказать
-                        </button>
+                        <div>
+                            {order_error ? <p className='fail-field'>{order_error}</p> : null}
+                        </div>
                     </div>
                 </div>
             </div>
