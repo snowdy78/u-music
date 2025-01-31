@@ -26,7 +26,7 @@
 .index-intro {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 80%;
+    grid-template-columns: max-content auto;
     grid-template-rows: auto;
 }
 

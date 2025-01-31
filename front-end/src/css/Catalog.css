@@ -6,7 +6,9 @@
     padding: 10px;
     gap: 10px;
 }
-
+.catalog-page {
+    width: 100%;
+}
 .catalog-button {
     position: relative;
 }

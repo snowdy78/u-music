@@ -96,64 +96,66 @@ export function CatalogPage() {
   }
   return <StrictMode>
       <ClientPage>
-        <div className="index-intro">
-          <CatalogButton>
-            <Link to="/catalog?category=guitar" onClick={onLinkClick}>
-                Гитары
-            </Link>
-            <Link to="/catalog?category=bass" onClick={onLinkClick}>
-                Бас-гитары
-            </Link>
-            <Link to="/catalog?category=piano" onClick={onLinkClick}>
-                Пианино
-            </Link>
-            <Link to="/catalog?category=drums" onClick={onLinkClick}>
-                Барабаны
-            </Link>
-            <Link to="/catalog?category=trumpet" onClick={onLinkClick}>
-                Духовые
-            </Link>
-          </CatalogButton>
-          <InstrumentSearch search_list={search_list}/>
-        </div>
-        <div className='container'>
-          <h2 className='font-primary'>Каталог</h2>
-          <hr className='hr-indent' />
-          <form className='container' onSubmit={onSubmitFilters}>
-            <div className='container catalog__filters'>
-              <div className='catalog__filters__category-filter'>
-                <select name="category" id="" defaultValue={category.current}>
-                  <option value="">Любое</option>
-                  <option value="guitar">Гитары</option>
-                  <option value="bass">Бас-гитары</option>
-                  <option value="piano">Пианино</option>
-                  <option value="drums">Барабаны</option>
-                  <option value="trumpet">Духовые</option>
-                </select>
+        <div className='catalog-page'>
+          <div className="index-intro">
+            <CatalogButton>
+              <Link to="/catalog?category=guitar" onClick={onLinkClick}>
+                  Гитары
+              </Link>
+              <Link to="/catalog?category=bass" onClick={onLinkClick}>
+                  Бас-гитары
+              </Link>
+              <Link to="/catalog?category=piano" onClick={onLinkClick}>
+                  Пианино
+              </Link>
+              <Link to="/catalog?category=drums" onClick={onLinkClick}>
+                  Барабаны
+              </Link>
+              <Link to="/catalog?category=trumpet" onClick={onLinkClick}>
+                  Духовые
+              </Link>
+            </CatalogButton>
+            <InstrumentSearch search_list={search_list}/>
+          </div>
+          <div className='container'>
+            <h2 className='font-primary'>Каталог</h2>
+            <hr className='hr-indent' />
+            <form className='container' onSubmit={onSubmitFilters}>
+              <div className='container catalog__filters'>
+                <div className='catalog__filters__category-filter'>
+                  <select name="category" id="" defaultValue={category.current}>
+                    <option value="">Любое</option>
+                    <option value="guitar">Гитары</option>
+                    <option value="bass">Бас-гитары</option>
+                    <option value="piano">Пианино</option>
+                    <option value="drums">Барабаны</option>
+                    <option value="trumpet">Духовые</option>
+                  </select>
+                </div>
+                <div className='catalog__filters__model-name-filter'>
+                  <label htmlFor="model-name">Назвиние модели&nbsp;</label>
+                  <input type="text" name="model_name" id='model-name' defaultValue={name.current} />
+                </div>
+                <div className='catalog__filters__price-filter'>
+                  <label htmlFor="price-range-from">Цена от&nbsp;</label>
+                  <input type="text" name="price_from" id='price-range-from' placeholder={"0"} />
+                  <label htmlFor="price-range-to">&nbsp;до&nbsp;</label>
+                  <input type="text" name="price_to" id='price-range-to' placeholder={price_to.current} />
+                </div>
+                <div className='catalog__filters__in-stock-filter'>
+                  <label htmlFor="in-stock-range-from">В наличии от&nbsp;</label>
+                  <input type="text" name="stock_from" id='in-stock-range-from' placeholder={stock_from.current} />
+                  <label htmlFor="in-stock-range-to">&nbsp;до&nbsp;</label>
+                  <input type="text" name="stock_to" id='in-stock-range-to' placeholder={stock_to.current} />
+                </div>
               </div>
-              <div className='catalog__filters__model-name-filter'>
-                <label htmlFor="model-name">Назвиние модели&nbsp;</label>
-                <input type="text" name="model_name" id='model-name' defaultValue={name.current} />
+              <div className='container'>
+                <button type='submit' className='bg-primary catalog__filters__btn-submit'>Применить</button>
               </div>
-              <div className='catalog__filters__price-filter'>
-                <label htmlFor="price-range-from">Цена от&nbsp;</label>
-                <input type="text" name="price_from" id='price-range-from' placeholder={"0"} />
-                <label htmlFor="price-range-to">&nbsp;до&nbsp;</label>
-                <input type="text" name="price_to" id='price-range-to' placeholder={price_to.current} />
-              </div>
-              <div className='catalog__filters__in-stock-filter'>
-                <label htmlFor="in-stock-range-from">В наличии от&nbsp;</label>
-                <input type="text" name="stock_from" id='in-stock-range-from' placeholder={stock_from.current} />
-                <label htmlFor="in-stock-range-to">&nbsp;до&nbsp;</label>
-                <input type="text" name="stock_to" id='in-stock-range-to' placeholder={stock_to.current} />
-              </div>
-            </div>
-            <div className='container'>
-              <button type='submit' className='bg-primary catalog__filters__btn-submit'>Применить</button>
-            </div>
-          </form>
-          <hr className='hr-indent' />
-          <Catalog filters={filters} instruments={instruments} />
+            </form>
+            <hr className='hr-indent' />
+            <Catalog filters={filters} instruments={instruments} />
+          </div>
         </div>
       </ClientPage>
     </StrictMode>

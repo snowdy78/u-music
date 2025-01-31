@@ -28,7 +28,8 @@ export function Auth() {
             type: 'text',
             validate: (data: string) => data.length > 0,
             onFail,
-            onPass
+            onPass,
+            required: true,
         },
         {
             placeholder: "Password",
@@ -36,7 +37,8 @@ export function Auth() {
             type: 'password',
             validate: (data: string) => data.length >= 8,
             onFail,
-            onPass
+            onPass,
+            required: true,
         }
     ]
     const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
