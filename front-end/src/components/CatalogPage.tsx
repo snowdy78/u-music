@@ -10,14 +10,19 @@ import React from "react"
 import { useStore } from "../store/hooks/useStore"
 import { Link, useSearchParams } from "react-router"
 import { EInstrumentCategory, IInstrument } from "../store/Instrument.ts"
+import { ServerApi } from "../server-api.ts"
+import { observer } from "mobx-react-lite"
 
-export function CatalogPage() {
+export const CatalogPage = observer(function() {
   const [search_params, setSearchParams] = useSearchParams();
   const store = useStore();
   const [instruments, setInstruments] = React.useState<IInstrument[]>([]);
   const [search_list, setSearchList] = React.useState<Searchable[]>([]);
   const [filters, setFilters] = React.useState<Filters>({});
-  
+  const [totalInstrumentCount, setTotalInstrumentCount] = React.useState<number>(0);
+  const [pageOffset, setPageOffset] = React.useState<number>(0);
+  const [chunkSize, setChunkSize] = React.useState<number>(8);
+
   const category = React.useRef<string>('');
   const price_from = React.useRef<string>('');
   const price_to = React.useRef<string>('');
@@ -25,13 +30,17 @@ export function CatalogPage() {
   const stock_from = React.useRef<string>('');
   const stock_to = React.useRef<string>('');
   React.useEffect(() => {
+    ServerApi.getTotalNumberOfInstruments().then(x => {
+      setTotalInstrumentCount(x.count);
+    })
+  }, []);
+  React.useEffect(() => {
     price_from.current = search_params.get('price_from') ?? '0';
     name.current = search_params.get('model_name') ?? '';
     stock_from.current = search_params.get('stock_from') ?? '0';
     stock_to.current = search_params.get('stock_to') ?? '';
     category.current = search_params.get('category') ?? '';
-
-    store.loadInstruments().then(
+    store.loadInstruments(pageOffset, pageOffset + chunkSize).then(
       async () => {
         const list: Searchable[] = [];
         await store.instruments.loadImages();
@@ -70,7 +79,7 @@ export function CatalogPage() {
         setFilters(filters);
       }
     )
-  }, [search_params]);
+  }, [search_params, pageOffset, chunkSize]);
   function onLinkClick(e: React.MouseEvent<HTMLAnchorElement>) {
     e.stopPropagation();
     const rgx = /[a-z]+$/gmi;
@@ -93,6 +102,10 @@ export function CatalogPage() {
       params.set(key, value as string)
     });
     setSearchParams(params);
+  }
+  function onPagination(index: number) {
+    console.log(index)
+    setPageOffset((index - 1) * chunkSize);
   }
   return <StrictMode>
       <ClientPage>
@@ -154,9 +167,9 @@ export function CatalogPage() {
               </div>
             </form>
             <hr className='hr-indent' />
-            <Catalog filters={filters} instruments={instruments} />
+            <Catalog chunkSize={chunkSize} onPageChange={onPagination} totalInstruments={totalInstrumentCount} filters={filters} instruments={instruments} />
           </div>
         </div>
       </ClientPage>
     </StrictMode>
-}
+})

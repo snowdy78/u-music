@@ -22,19 +22,20 @@ export type DataBaseImageInstance = {
   id: number; name: string; data: string; type: string;
 };
 export type DataBaseOrderInstance = {
-  id: number; 
-  user_id: number;
-  goods: { id: number, count: number }[];
+  id: number; user_id: number; goods: {id: number, count: number}[];
 };
 
 type RequestBodyInstance = Map<string, number|string|boolean|undefined|null>;
 export class ServerApi {
   public static url = 'http://localhost:80/u-music';
   private static async get(url: string, body?: RequestBodyInstance) {
+    url = ServerApi.url + url;
     if (body && body.size > 0) {
       url += '?'
       body.forEach((value, key) => {
-        if (value) url += `${key}=${value}&`
+        if (value !== undefined) {
+          url += `${key}=${value}&`;
+        }
       })
     }
     const response = await fetch(url, {
@@ -57,6 +58,7 @@ export class ServerApi {
   private static async post(
       url: string, body: URLSearchParams|FormData|FormDataEntryValue,
       headers: any = {'Content-Type': 'application/x-www-form-urlencoded'}) {
+    url = ServerApi.url + url;
     const response = await fetch(url, {method: 'POST', headers, body})
     if (!response.ok) {
       throw new Error(`RequestError: ${response.status}`)
@@ -67,7 +69,7 @@ export class ServerApi {
       let json: any;
       try {
         json = JSON.parse(text);
-      } catch(err: any) {
+      } catch (err: any) {
         console.error(text);
         throw new Error(err.message);
       }
@@ -79,73 +81,79 @@ export class ServerApi {
       throw new Error(e.message)
     }
   }
-  public static async getInstruments(): Promise<DataBaseInstrumentInstance[]> {
-    return await ServerApi.get(ServerApi.url + '/instruments');
+  public static async getInstruments(chunk_start: number = 0, chunk_end: number = 1): Promise<DataBaseInstrumentInstance[]> {
+    const map: RequestBodyInstance = new Map();
+    map.set('chunk_start', chunk_start);
+    map.set('chunk_end', chunk_end);
+    return await ServerApi.get('/instruments', map);
   }
   public static async getOrders(): Promise<DataBaseOrderInstance[]> {
-    return await ServerApi.get(ServerApi.url + '/orders');
+    return await ServerApi.get('/orders');
   }
   public static async getUsers(): Promise<DataBaseUserInstance[]> {
-    return await ServerApi.get(ServerApi.url + '/users');
+    return await ServerApi.get('/users');
   }
   public static async getImages(): Promise<DataBaseImageInstance[]> {
-    return await ServerApi.get(ServerApi.url + '/images');
+    return await ServerApi.get('/images');
   }
   public static async postRegisterUser(body: URLSearchParams): Promise<{}> {
-    return await ServerApi.post(ServerApi.url + '/user-register', body);
+    return await ServerApi.post('/user-register', body);
   }
-  public static async addInstrument(body: URLSearchParams): Promise<{id: number}> {
-    return await ServerApi.post(ServerApi.url + '/add-instrument', body);
+  public static async addInstrument(body: URLSearchParams):
+      Promise<{id: number}> {
+    return await ServerApi.post('/add-instrument', body);
   }
   public static async addOrder(body: URLSearchParams): Promise<{id: number}> {
-    return await ServerApi.post(ServerApi.url + '/add-order', body);
+    return await ServerApi.post('/add-order', body);
   }
   public static async uploadImage(body: FormData|FormDataEntryValue):
-  Promise<{img_id: string}> {
-    return await ServerApi.post(ServerApi.url + '/upload-image', body, {});
+      Promise<{img_id: string}> {
+    return await ServerApi.post('/upload-image', body, {});
   }
   public static async updateInstrument(body: URLSearchParams): Promise<{}> {
-    return await ServerApi.post(ServerApi.url + '/update-instrument', body);
+    return await ServerApi.post('/update-instrument', body);
   }
   public static async updateUser(body: URLSearchParams): Promise<{}> {
-    return await ServerApi.post(ServerApi.url + '/update-user', body);
+    return await ServerApi.post('/update-user', body);
   }
   public static async deleteImage(id: number) {
     const body: RequestBodyInstance = new Map();
     body.set('id', id);
-    return await ServerApi.get(ServerApi.url + `/delete-image`, body);
+    return await ServerApi.get(`/delete-image`, body);
   }
   public static async deleteUser(id: number) {
     const body: RequestBodyInstance = new Map();
     body.set('id', id);
-    return await ServerApi.get(ServerApi.url + `/delete-user`, body);
+    return await ServerApi.get(`/delete-user`, body);
   }
   public static async deleteOrder(id: number) {
     const body: RequestBodyInstance = new Map();
     body.set('id', id);
-    return await ServerApi.get(ServerApi.url + `/delete-order`, body);
+    return await ServerApi.get(`/delete-order`, body);
   }
   public static async deleteInstrument(id: number) {
     const body: RequestBodyInstance = new Map();
     body.set('id', id);
-    return await ServerApi.get(ServerApi.url + `/delete-instrument`, body);
+    return await ServerApi.get(`/delete-instrument`, body);
   }
-  public static async getImage(id: number):
-      Promise<DataBaseImageInstance> {
+  public static async getImage(id: number): Promise<DataBaseImageInstance> {
     const map: RequestBodyInstance = new Map();
     map.set('id', id);
-    return await ServerApi.get(ServerApi.url + '/image', map);
+    return await ServerApi.get('/image', map);
   }
   public static async getInstrument(id: number):
       Promise<DataBaseInstrumentInstance> {
     const map: RequestBodyInstance = new Map();
     map.set('id', id);
-    return await ServerApi.get(ServerApi.url + '/instrument', map);
+    return await ServerApi.get('/instrument', map);
   }
   public static async getOrder(id: number): Promise<DataBaseOrderInstance> {
     const map: RequestBodyInstance = new Map();
     map.set('id', id);
-    return await ServerApi.get(ServerApi.url + '/instrument', map);  
+    return await ServerApi.get('/instrument', map);
+  }
+  public static async getTotalNumberOfInstruments(): Promise<{count: number}> {
+    return await ServerApi.get('/count-instruments');
   }
   public static async getUser(body: DataBaseUserPossibleAttrs):
       Promise<DataBaseUserInstance> {
@@ -155,15 +163,14 @@ export class ServerApi {
     map.set('email', body.email);
     map.set('password', body.password);
     map.set('is_admin', body.is_admin);
-    return await ServerApi.get(ServerApi.url + '/user', map);
+    return await ServerApi.get('/user', map);
   }
   public static async actionWithImageUpload(
-    form_data: FormData,
-    image_key: string,
-    action: (without_img_data: URLSearchParams, img_id?: string) => Promise<void>
-  ) {
+      form_data: FormData, image_key: string,
+      action: (without_img_data: URLSearchParams, img_id?: string) =>
+          Promise<void>) {
     const image_data = new FormData();
-    let img_id: string | undefined;
+    let img_id: string|undefined;
     const img = form_data.get('image');
     if (img && (img as File).size !== 0) {
       image_data.append(image_key, form_data.get(image_key) as File);

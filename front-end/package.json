@@ -33,6 +33,7 @@
     "react-dom": "^18.3.1",
     "react-native-safe-area-context": "^5.1.0",
     "react-native-screens": "^4.5.0",
+    "react-paginate": "^8.3.0",
     "react-router": "^7.1.1",
     "react-router-dom": "^7.1.1",
     "react-transition-group": "^4.4.5"

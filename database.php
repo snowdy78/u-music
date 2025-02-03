@@ -30,6 +30,9 @@
             }
             return $row;
         }
+        private function countData(string $table_name) {
+            return $this->requestToData($this->query("SELECT COUNT(*) FROM $table_name"))[0]['COUNT(*)'];
+        }
         private function findData(string $table_name, array $data, MatchType $match, int | null $chunk_start = null, int | null $chunk_end = null) {
             $query = queryWhere(
                 "SELECT * FROM $table_name", 
@@ -40,6 +43,9 @@
                 $query .= " LIMIT $chunk_start, $chunk_end";
             }
             return $this->requestToData($this->query($query));
+        }
+        public function countInstruments() {
+            return $this->countData('instruments');
         }
         public function registerUser(string $login, string $email, string $password) {
             if (empty($login)) {

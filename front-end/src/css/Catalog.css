@@ -1,4 +1,35 @@
-.catalog {
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.pagination__page-link {
+    color: rgb(53, 53, 53);
+    text-decoration: none !important;
+}
+.pagination__disabled > .pagination__page-link {
+    color: var(--dark-grey) !important;
+}
+
+.pagination__page {
+    margin: 0 5px;
+    background-color: var(--light-grey);
+    padding: 3px 5px;
+    border-radius: 2px;
+}
+.pagination__page:hover {
+    cursor: pointer !important;
+}
+ul.pagination {
+    list-style-type: none !important;
+}
+.pagination ul > li::marker {
+    display: none !important;
+}
+.pagination__page::marker {
+    display: none !important;
+}
+.catalog-items {
     display: flex;
     width: 100%;
     flex-direction: row;

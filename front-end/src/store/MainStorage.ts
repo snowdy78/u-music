@@ -22,9 +22,9 @@ export const MainStorage =
         logout() {
             self.authorized_user = null;
         },
-        loadInstruments: flow(function* loadInstruments() {
+        loadInstruments: flow(function* loadInstruments(chunk_start: number = 0, chunk_end: number = 1) {
             try {
-                const response = yield ServerApi.getInstruments();
+                const response = yield ServerApi.getInstruments(chunk_start, chunk_end);
                 self.instruments.clear();
                 for (let i = 0; i < response.length; i++) {
                     self.instruments.insert({
