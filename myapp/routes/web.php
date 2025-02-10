@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'DataBaseController@index');
 
-Route::get('/users', function () {
+Route::apiResource('instruments', 'InstrumentsController');
 
-});
+Route::apiResource('users', 'UsersController');
+
+Route::apiResource('orders', 'OrdersController');
+
+Route::apiResource('images', 'ImagesController');
