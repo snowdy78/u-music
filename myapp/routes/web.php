@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'DataBaseController@index');
-
 Route::apiResource('instruments', 'InstrumentsController');
 
 Route::apiResource('users', 'UsersController');

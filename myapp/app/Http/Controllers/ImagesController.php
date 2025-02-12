@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\UpdateImageRequest;
+use App\Http\Resources\ImageResource;
 
 class ImagesController extends Controller
 {
@@ -21,7 +22,17 @@ class ImagesController extends Controller
      */
     public function store(StoreImageRequest $request)
     {
-        //
+        $data = addslashes(file_get_contents($request->file('image_file')));
+        $name = $request->file('image_file')->getClientOriginalName();
+        $type = $request->file('image_file')->getClientMimeType();
+        $image = new Image();
+        $image->fill([
+            'name' => $name,
+            'type' => $type,
+            'data' => $data
+        ]);
+        $image->save();
+        return ImageResource::make($image);
     }
 
     /**
@@ -29,9 +40,7 @@ class ImagesController extends Controller
      */
     public function show(Image $image)
     {
-        $array = $image->toArray();
-        $array['data'] = "data:".$image->type.";base64,".base64_encode($image['data']);
-        return response()->json($array);
+        return ImageResource::make($image);
     }
 
     /**
@@ -39,7 +48,16 @@ class ImagesController extends Controller
      */
     public function update(UpdateImageRequest $request, Image $image)
     {
-        //
+        $data = addslashes(file_get_contents($request->file('image_file')));
+        $name = $request->file('image_file')->getClientOriginalName();
+        $type = $request->file('image_file')->getClientMimeType();
+        $image->update([
+            'name' => $name,
+            'type' => $type,
+            'data' => $data
+        ]);
+        $image->save();
+        return ImageResource::make($image);
     }
 
     /**
@@ -47,6 +65,7 @@ class ImagesController extends Controller
      */
     public function destroy(Image $image)
     {
-        //
+        $image->delete();
+        return request()->json([]);
     }
 }
