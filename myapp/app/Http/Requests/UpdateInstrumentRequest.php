@@ -11,7 +11,7 @@ class UpdateInstrumentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateInstrumentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'img_id' => ['exists:images,id'],
+            'model_name' => ['string', 'max:255'],
+            'category' => ['string', 'in:Guitar,Bass,Drums,Piano,Ukulele,Synth,Trumpet', 'max:255'],
+            'price' => ['integer'],
+            'in_stock' => ['integer'],
         ];
     }
 }

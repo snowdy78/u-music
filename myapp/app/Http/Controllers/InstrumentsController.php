@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Instrument;
 use App\Http\Requests\StoreInstrumentRequest;
 use App\Http\Requests\UpdateInstrumentRequest;
+use App\Http\Resources\InstrumentResource;
 
 class InstrumentsController extends Controller
 {
@@ -22,7 +23,7 @@ class InstrumentsController extends Controller
      */
     public function store(StoreInstrumentRequest $request)
     {
-        return Instrument::create($request->all());
+        return InstrumentResource::make(Instrument::create($request->all()));
     }
 
     /**
@@ -30,7 +31,7 @@ class InstrumentsController extends Controller
      */
     public function show(Instrument $instrument)
     {
-        
+        return InstrumentResource::make($instrument);
     }
 
     /**
@@ -38,7 +39,8 @@ class InstrumentsController extends Controller
      */
     public function update(UpdateInstrumentRequest $request, Instrument $instrument)
     {
-        //
+        $instrument->update($request->all());
+        return InstrumentResource::make($instrument);
     }
 
     /**
@@ -46,6 +48,7 @@ class InstrumentsController extends Controller
      */
     public function destroy(Instrument $instrument)
     {
-        //
+        $instrument->delete();
+        return request()->json([]);
     }
 }
