@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Http\Resources\OrderResource;
 
 class OrdersController extends Controller
 {
@@ -13,7 +14,8 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::all();
+        return OrderResource::collection($orders);
     }
 
     /**
@@ -21,7 +23,8 @@ class OrdersController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        //
+        $request['goods'] = json_encode($request['goods']);
+        return OrderResource::make(Order::create($request->all()));
     }
 
     /**
@@ -29,7 +32,7 @@ class OrdersController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return OrderResource::make($order);
     }
 
     /**
@@ -37,7 +40,9 @@ class OrdersController extends Controller
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
-        //
+        $request['goods'] = json_encode($request['goods']);
+        $order->update($request->all());
+        return OrderResource::make($order);
     }
 
     /**
@@ -45,6 +50,7 @@ class OrdersController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        $order->delete();
+        return request()->json([]);
     }
 }
