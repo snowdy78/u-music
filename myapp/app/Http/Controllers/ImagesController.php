@@ -29,7 +29,7 @@ class ImagesController extends Controller
         $image->fill([
             'name' => $name,
             'type' => $type,
-            'data' => $data
+            'blob' => $data
         ]);
         $image->save();
         return ImageResource::make($image);
@@ -54,7 +54,7 @@ class ImagesController extends Controller
         $image->update([
             'name' => $name,
             'type' => $type,
-            'data' => $data
+            'blob' => $data
         ]);
         $image->save();
         return ImageResource::make($image);

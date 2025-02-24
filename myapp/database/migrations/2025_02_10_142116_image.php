@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->text('name');
-            $table->binary('data');
+            $table->binary('blob');
             $table->text('type');
         });
     }
