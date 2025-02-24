@@ -9,5 +9,12 @@ class User extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'login',
+        'email',
+        'password',
+        'is_admin',
+        'img_id'
+    ];
     public $timestamps = false;
 }

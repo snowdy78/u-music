@@ -21,8 +21,16 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $this->mergeIfMissing([
+            'is_admin' => 0
+        ]);
         return [
-            //
+            'login' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required', 'string', 'min:8'],
+            'is_admin' => ['integer', 'min:0,max:1'],
+            'img_id' => ['exists:images,id', 'nullable'],
         ];
     }
 }
