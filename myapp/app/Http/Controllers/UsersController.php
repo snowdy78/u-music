@@ -22,9 +22,12 @@ class UsersController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        $request['password'] = sha1($request['password']);
         return UserResource::make(User::create($request->all()));
     }
-
+    function login() {
+        return UserResource::make(User::where('login', request('name'))->orWhere('email', request('name'))->where('password', sha1(request('password')))->first());
+    }
     /**
      * Display the specified resource.
      */

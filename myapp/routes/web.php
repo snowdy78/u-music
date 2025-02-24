@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,11 +14,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::apiResource('instruments', 'InstrumentsController');
-
-Route::apiResource('users', 'UsersController');
-
-Route::apiResource('orders', 'OrdersController');
-
-Route::apiResource('images', 'ImagesController');
+Route::group([
+    'middleware' => ['cors'],
+], function ($router) {
+    Route::apiResource('instruments', 'InstrumentsController');
+    
+    Route::apiResource('users', 'UsersController');
+    Route::get('login-user/{name}/{password}', 'UsersController@login');
+    
+    Route::apiResource('orders', 'OrdersController');
+    
+    Route::apiResource('images', 'ImagesController');
+});
