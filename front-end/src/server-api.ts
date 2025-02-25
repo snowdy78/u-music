@@ -31,108 +31,76 @@ type RequestBodyInstance = Map<string, number|string|boolean|undefined|null>;
 export class ServerApi {
 	public static url = 'http://u-music-api.ru';
 	private static async get(request_address: string, body?: any) {
-		let full_url = `${ServerApi.url}${request_address}`;
-		const response = await fetch(full_url, {
-			method: 'GET',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body
-		})
-		if (response.ok) {
-			try {
-				const json = await response.json();
-				if (json.err_code) throw new Error(json.err_code);
-				return json.data;
-			} catch (e) {
-				throw new Error(`${e}`)
-			}
+		let response: Axios.AxiosXHR<any> | undefined;
+		try {
+			response = await axios.get<any>(ServerApi.url + request_address, {params: body});
+		} catch(err: any) {
+			console.error(err.message);
+			throw new Error(err.message);
 		}
-		throw new Error('error');
+		const response_data = response.data;
+		if (response_data !== undefined) { 
+			if (response_data.data !== undefined) {
+				return response_data.data;
+			}
+			return response_data;
+		}
+		return response;
 	}
 	private static async post(
 			url: string, 
-			body: URLSearchParams|FormData|FormDataEntryValue,
-			headers: any = {Accept: 'application/json', 'Content-Type': 'application/json'}
+			body: URLSearchParams|FormData|FormDataEntryValue|JSON,
+			headers: any = {'Content-Type': 'application/x-www-form-urlencoded'}
 	) {
-		url = `${ServerApi.url}${url}`;
-		const response = await fetch(url, {method: 'POST', headers, body})
-		if (!response.ok) {
-			throw new Error(`RequestError: ${response.status}`)
-		}
+		let response: Axios.AxiosXHR<any> | undefined;
 		try {
-			const blob = await response.blob();
-			const text = await blob.text();
-			let json: any;
-			try {
-				json = JSON.parse(text);
-			} catch (err: any) {
-				console.error(text);
-				throw new Error(err.message);
-			}
-			if (json.err_code) {
-				throw new Error(json.err_code)
-			};
-			return json.data;
-		} catch (e: any) {
-			throw new Error(e.message)
+			response = await axios.post<any>(ServerApi.url + url, body, {headers});
+		} catch (err: any) {
+			console.error(err.message);
+			throw new Error(err.message);
 		}
+		const response_data = response.data;
+		if (response_data !== undefined) { 
+			if (response_data.data !== undefined) {
+				return response_data.data;
+			}
+			return response_data;
+		}
+		return response;
 	}
 	private static async put(
 		url: string, 
-		body: URLSearchParams|FormData|FormDataEntryValue,
-		headers: any = {Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'}
+		body: URLSearchParams|FormData|FormDataEntryValue|JSON,
+		headers: any = {'Content-Type': 'application/x-www-form-urlencoded'}
 	) {
-		url = `${ServerApi.url}${url}`;
-		const response = await fetch(url, {method: 'PUT', headers, body})
-		if (!response.ok) {
-			throw new Error(`RequestError: ${response.status}`)
-		}
+		let response: Axios.AxiosXHR<any> | undefined;
 		try {
-			const blob = await response.blob();
-			const text = await blob.text();
-			let json: any;
-			try {
-				json = JSON.parse(text);
-			} catch (err: any) {
-				console.error(text);
-				throw new Error(err.message);
-			}
-			if (json.err_code) {
-				throw new Error(json.err_code)
-			};
-			return json.data;
-		} catch (e: any) {
-			throw new Error(e.message)
+			response = await axios.put(ServerApi.url + url, body, {headers});
+		} catch (err: any) {
+			console.error(err.message);
+			throw new Error(err.message);
 		}
+		const response_data = response.data;
+		if (response_data !== undefined) { 
+			if (response_data.data !== undefined) {
+				return response_data.data;
+			}
+			return response_data;
+		}
+		return response;
 	}
 	private static async delete(
 		url: string,
-		headers: any = {Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'}
+		headers: any = {'Content-Type': 'application/json'}
 	) {
-		url = `${ServerApi.url}${url}`;
-		const response = await fetch(url, {method: 'DELETE', headers});
-		if (!response.ok) {
-			throw new Error(`RequestError: ${response.status}`)
-		}
+		let response: Axios.AxiosXHR<any> | undefined;
 		try {
-			const blob = await response.blob();
-			const text = await blob.text();
-			let json: any;
-			try {
-				json = JSON.parse(text);
-			} catch (err: any) {
-				console.error(text);
-				throw new Error(err.message);
-			}
-			if (json.err_code) {
-				throw new Error(json.err_code)
-			};
-			return json;
-		} catch (e: any) {
-			throw new Error(e.message)
+			response = await axios.delete(ServerApi.url + url, {headers});
+		} catch (err: any) {
+			console.error(err.message);
+			throw new Error(err.message);
 		}
+		return response.data;
 	}
 	public static async getInstruments(
 			chunk_start: number = 0,
@@ -163,14 +131,14 @@ export class ServerApi {
 	}
 	public static async uploadImage(
 		body: FormData|FormDataEntryValue
-	): Promise<{img_id: string}> {
-		return await ServerApi.post('/images', body);
+	): Promise<DataBaseImageInstance> {
+		return await ServerApi.post('/images', body, {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'});
 	}
 	public static async updateInstrument(id: number, body: URLSearchParams): Promise<DataBaseInstrumentInstance> {
 		return await ServerApi.put(`/instruments/${id}`, body);
 	}
 	public static async updateUser(id: number, body: URLSearchParams): Promise<DataBaseUserInstance> {
-		return await ServerApi.put(`/users/${id}`, body);
+		return await ServerApi.put(`/users/${id}`, body, {'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'});
 	}
 	public static async deleteImage(id: number) {
 		return await ServerApi.delete(`/images/${id}`);
@@ -215,12 +183,14 @@ export class ServerApi {
 			action: (without_img_data: URLSearchParams, img_id?: string) =>
 					Promise<void>) {
 		const image_data = new FormData();
-		let img_id: string|undefined;
-		const img = form_data.get('image');
+		let img_id: number|undefined;
+		const img = form_data.get(image_key);
 		if (img && (img as File).size !== 0) {
 			image_data.append(image_key, form_data.get(image_key) as File);
-			img_id = (await ServerApi.uploadImage(image_data)).img_id;
-			console.log(img_id);
+			const response = await ServerApi.uploadImage(image_data);
+			console.log('response: ', response);
+			img_id = response.id;
+			console.log('img_id: ', img_id);
 		}
 		form_data.delete(image_key);
 		if (img_id !== undefined) {
@@ -228,7 +198,7 @@ export class ServerApi {
 		}
 		const search_url = new URLSearchParams();
 		form_data.forEach((value, key) => {
-			search_url.append(key, value.toString());
+			search_url.set(key, value as string);
 		});
 		return action(search_url);
 	}

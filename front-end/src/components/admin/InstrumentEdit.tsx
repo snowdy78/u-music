@@ -83,8 +83,7 @@ export function InstrumentEdit() {
                 }
                 form_data_without_image.append('id', params.id);
                 try {
-                    await ServerApi.updateInstrument(form_data_without_image);
-                    const instrument = await ServerApi.getInstrument(+params.id);
+                    const instrument = await ServerApi.updateInstrument(+params.id, form_data_without_image);
                     setInstrumentData(Instrument.create({
                         id: +instrument.id,
                         model_name: instrument.model_name,

@@ -76,7 +76,6 @@ export function Instruments({name, header, ...props}: ContentComponentProps): Re
                     instruments !== null ? 
                         instruments.map((instrument, key) => {
                             let style = {};
-                            const table_width = 8;
                             if (key === instruments.length - 1)
                                 style = { ...style, borderBottom: '1px solid var(--black)' };
                             return (

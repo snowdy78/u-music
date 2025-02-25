@@ -47,7 +47,7 @@ export const Instrument = types.model('Instrument', {
         }
         try {
             const image = yield ServerApi.getImage(self.img_id!);
-            self.img_data = image.data;
+            self.img_data = image.blob;
         } catch (err) {
             console.error(err);
             throw err;

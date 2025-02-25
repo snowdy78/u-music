@@ -37,7 +37,7 @@ export function ProfileEdit() {
     const validation_form_fields: ValidationFieldInstance[] = [
         {
             placeholder: "Фото профиля",
-            name: 'image',
+            name: 'image_file',
             id: 'avatar-upload',
             type: 'file',
             maxLength: 1024000,
@@ -79,7 +79,7 @@ export function ProfileEdit() {
         },
         {
             placeholder: "Повторите пароль",
-            name: 'password_repeat',
+            name: 'password_confirmation',
             className: 'input_repeat-password',
             type: 'password',
             validate: (data: string) => {
@@ -106,26 +106,32 @@ export function ProfileEdit() {
         const formData = new FormData(form);
         await ServerApi.actionWithImageUpload(
             formData, 
-            'image', 
+            'image_file', 
             async (user_data: URLSearchParams) => {
                 if (!store.authorized_user) {
                     return;
                 }
-                user_data.delete('password_repeat');
-                user_data.forEach((value, key) => {
-                    if (value !== '') {
+                user_data.delete('password_confirmation');
+                const keys: string[] = [];
+                user_data.forEach((value, key) => {                    
+                    if (!!value && value !== (store.authorized_user as any)[key]) {
                         return;
                     }
-                    user_data.delete(key);
+                    keys.push(key);
                 });
-                if (user_data.size === 1) {
+                
+                for (let i = 0; i < keys.length; i++) {
+                    user_data.delete(keys[i]);
+                }
+                if (user_data.size === 1 && user_data.get('img_id') === undefined) {
                     setError("Пожалуйста измените данные");
                     return;
                 }
-                user_data.append('id', store.authorized_user.id);
                 try {
-                    await ServerApi.updateUser(user_data);
-                    const user_json = await ServerApi.getUser({id: +store.authorized_user.id});
+                    for (const [key, value] of user_data) {
+                        console.log('max', key, value);
+                    }
+                    const user_json = await ServerApi.updateUser(store.authorized_user.id, user_data);
                     sessionStorage.removeItem('authorized-user');
                     sessionStorage.setItem('authorized-user', JSON.stringify({
                         ...user_json,

@@ -1,10 +1,9 @@
 import React from "react";
 import { ContentComponentProps } from "./Admin";
 import { DataBaseOrderInstance, ServerApi } from "../../server-api";
-import { IOrder } from "../../store/Order";
 
 export function OrdersRouting({header, name, ...props}: ContentComponentProps) {
-    const [error, setError] = React.useState<string>('');
+    const [error, _] = React.useState<string>('');
     const [orders, setOrders] = React.useState<DataBaseOrderInstance[]>([]);
     React.useEffect(() => {
         ServerApi.getOrders().then(setOrders);

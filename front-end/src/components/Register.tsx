@@ -56,6 +56,7 @@ export function Register() {
         {
             placeholder: "Repeat password",
             type: 'password',
+            name: 'password_confirmation',
             validate: (data: string) => data === password,
             onFail,
             onPass

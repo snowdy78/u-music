@@ -23,6 +23,7 @@ import { Error401Page } from "./components/Error401Page"
 import { UserEdit } from "./components/admin/UserEdit"
 import { Basket } from "./components/Basket"
 import { StoreProvider } from "./store/hooks/useStore"
+import { Test } from "./test"
 
 function AppComponent() {
   return (
@@ -74,6 +75,9 @@ function AppComponent() {
             />
             <Route path="/catalog?category=:category"
               Component={() => <CatalogPage />}
+            />
+            <Route path="/test"
+              Component={() => <Test/>}
             />
           </Routes>
         </BrowserRouter>

@@ -21,7 +21,7 @@ export const CatalogPage = observer(function() {
   const [filters, setFilters] = React.useState<Filters>({});
   const [totalInstrumentCount, setTotalInstrumentCount] = React.useState<number>(0);
   const [pageOffset, setPageOffset] = React.useState<number>(0);
-  const [chunkSize, setChunkSize] = React.useState<number>(8);
+  const [chunkSize, _] = React.useState<number>(8);
 
   const category = React.useRef<string>('');
   const price_from = React.useRef<string>('');

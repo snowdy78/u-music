@@ -1,7 +1,10 @@
 import {Instance, types} from 'mobx-state-tree';
 
 export const BasketInstrument =
-    types.model('Instrument_Instance', {id: types.number, count: types.number});
+    types.model('Instrument_Instance', {
+		id: types.number,
+		count: types.number
+	});
 
 export interface IBasketInstrument extends Instance<typeof BasketInstrument> {}
 

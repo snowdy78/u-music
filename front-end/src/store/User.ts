@@ -3,7 +3,7 @@ import { Basket } from "./Basket";
 
 export const User = 
     types.model('User', {
-        id: types.string,
+        id: types.number,
         login: types.string,
         email: types.string,
         password: types.string,

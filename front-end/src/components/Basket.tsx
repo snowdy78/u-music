@@ -144,7 +144,7 @@ export const Basket = observer(function() {
         params.append('user_id', cart.user_id.toString());
         params.append('goods', JSON.stringify(cart.ids_of_instruments));
         try {
-            const id = await ServerApi.addOrder(params);
+            await ServerApi.addOrder(params);
             setOrderSuccess(`Заказ успешно создан`);
             setOrderError('')
         } catch(err: any) {

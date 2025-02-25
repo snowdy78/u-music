@@ -61,7 +61,7 @@ export function UserEdit() {
                     }
                     user_data.append('id', params.id);
                     try {
-                        await ServerApi.updateUser(user_data);
+                        await ServerApi.updateUser(+params.id, user_data);
                         setError('');
                         setSuccess('Пользователь успешно обновлен');
                     } catch (err: any) {

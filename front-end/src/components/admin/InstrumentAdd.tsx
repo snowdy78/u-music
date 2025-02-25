@@ -78,9 +78,6 @@ export function InstrumentAdd() {
                 form_data, 
                 'image', 
                 async (instrument_data: URLSearchParams) => {
-                    instrument_data.forEach((value, key) => 
-                        console.log(value)
-                    );
                     try {
                         await ServerApi.addInstrument(instrument_data);
                         setError('');
