@@ -14,7 +14,7 @@ class ImagesController extends Controller
      */
     public function index()
     {
-        return response()->json([]);
+        return response()->json([])->header('Content-Type', 'application/json');
     }
 
     /**
@@ -32,7 +32,7 @@ class ImagesController extends Controller
             'blob' => $data
         ]);
         $image->save();
-        return ImageResource::make($image);
+        return response(ImageResource::make($image))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -40,7 +40,7 @@ class ImagesController extends Controller
      */
     public function show(Image $image)
     {
-        return ImageResource::make($image);
+        return response(ImageResource::make($image))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -57,7 +57,7 @@ class ImagesController extends Controller
             'blob' => $data
         ]);
         $image->save();
-        return ImageResource::make($image);
+        return response(ImageResource::make($image))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -66,6 +66,6 @@ class ImagesController extends Controller
     public function destroy(Image $image)
     {
         $image->delete();
-        return request()->json([]);
+        return response(request()->json([]))->header('Content-Type', 'application/json');
     }
 }

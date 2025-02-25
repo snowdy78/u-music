@@ -14,7 +14,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return UserResource::collection(User::all());
+        return response(UserResource::collection(User::all()))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -23,17 +23,22 @@ class UsersController extends Controller
     public function store(StoreUserRequest $request)
     {
         $request['password'] = sha1($request['password']);
-        return UserResource::make(User::create($request->all()));
+        return response(UserResource::make(User::create($request->all())))->header('Content-Type', 'application/json');
     }
     function login() {
-        return UserResource::make(User::where('login', request('name'))->orWhere('email', request('name'))->where('password', sha1(request('password')))->first());
+        return response(UserResource::make(
+            User::where('login', request('name'))
+                ->orWhere('email', request('name'))
+                ->where('password', sha1(request('password'))
+            )->first()
+        ))->header('Content-Type', 'application/json');
     }
     /**
      * Display the specified resource.
      */
     public function show(User $user)
     {
-        return UserResource::make($user);
+        return response(UserResource::make($user))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -42,7 +47,7 @@ class UsersController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $user->update($request->all());
-        return UserResource::make($user);
+        return response(UserResource::make($user))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -51,6 +56,6 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return request()->json([]);
+        return response()->json([])->header('Content-Type', 'application/json');
     }
 }

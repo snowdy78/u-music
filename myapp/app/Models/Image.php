@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     use HasFactory;
-    protected $fillable = ['data', 'name', 'type'];
+    protected $fillable = ['blob', 'name', 'type'];
     public $timestamps = false;
 }
