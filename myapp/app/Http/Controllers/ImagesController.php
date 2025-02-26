@@ -22,14 +22,14 @@ class ImagesController extends Controller
      */
     public function store(StoreImageRequest $request)
     {
-        $data = addslashes(file_get_contents($request->file('image_file')));
-        $name = $request->file('image_file')->getClientOriginalName();
         $type = $request->file('image_file')->getClientMimeType();
+        $name = $request->file('image_file')->getClientOriginalName();
+        $file_contents = file_get_contents($request->file('image_file'));
         $image = new Image();
         $image->fill([
             'name' => $name,
             'type' => $type,
-            'blob' => $data
+            'blob' => $file_contents
         ]);
         $image->save();
         return response(ImageResource::make($image))->header('Content-Type', 'application/json');
@@ -48,13 +48,13 @@ class ImagesController extends Controller
      */
     public function update(UpdateImageRequest $request, Image $image)
     {
-        $data = addslashes(file_get_contents($request->file('image_file')));
         $name = $request->file('image_file')->getClientOriginalName();
         $type = $request->file('image_file')->getClientMimeType();
+        $file_contents = file_get_contents($request->file('image_file'));
         $image->update([
             'name' => $name,
             'type' => $type,
-            'blob' => $data
+            'blob' => $file_contents
         ]);
         $image->save();
         return response(ImageResource::make($image))->header('Content-Type', 'application/json');

@@ -17,7 +17,7 @@ export function Profile() {
             setImageData("./src/assets/default-profile-img.png");
         } else {
             ServerApi.getImage(store.authorized_user.img_id).then(image_json => {
-                setImageData(image_json.data);
+                setImageData(image_json.blob);
             }).catch(err => image_alt.current = err.message);
         }
     }, []);

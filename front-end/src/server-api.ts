@@ -21,7 +21,7 @@ export type DataBaseInstrumentInstance = {
 	img_id: number | null;
 };
 export type DataBaseImageInstance = {
-	id: number; name: string; data: string; type: string;
+	id: number; name: string; blob: string; type: string;
 };
 export type DataBaseOrderInstance = {
 	id: number; user_id: number; goods: {id: number, count: number}[];

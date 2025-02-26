@@ -18,7 +18,7 @@ class ImageResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
-            'blob' => "data:".$this->type.";base64,".base64_encode($this->blob)
+            'blob' => 'data:'.$this->type.";base64,".base64_encode($this->blob)
         ];
     }
 }
