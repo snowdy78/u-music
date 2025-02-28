@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InstrumentsController;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -26,5 +27,7 @@ Route::group([
     
     Route::apiResource('images', 'ImagesController');
 
-    Route::get('/instruments/{chunk_start}/{chunk_end}/{reversed?}', 'InstrumentsController@chunk');
+    Route::get('/instruments/{chunk_start}/{chunk_end}/{reversed?}', [InstrumentsController::class, 'chunk']);
+    Route::post('/select-instruments', [InstrumentsController::class, 'selected']);
+    Route::get('/instruments-total', [InstrumentsController::class, 'total']);
 });

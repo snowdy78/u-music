@@ -6,6 +6,7 @@ use App\Models\Instrument;
 use App\Http\Requests\StoreInstrumentRequest;
 use App\Http\Requests\UpdateInstrumentRequest;
 use App\Http\Resources\InstrumentResource;
+use Illuminate\Foundation\Http\FormRequest;
 
 class InstrumentsController extends Controller
 {
@@ -23,14 +24,14 @@ class InstrumentsController extends Controller
      */
     public function store(StoreInstrumentRequest $request)
     {
-        return InstrumentResource::make(Instrument::create($request->all()));
+        return response(InstrumentResource::make(Instrument::create($request->all())));
     }
     /**
      * Display the specified resource.
      */
     public function show(Instrument $instrument)
     {
-        return InstrumentResource::make($instrument);
+        return response(InstrumentResource::make($instrument));
     }
 
     public function chunk(int $chunk_start, int $chunk_end, bool $reversed = false) 
@@ -47,13 +48,22 @@ class InstrumentsController extends Controller
         $instruments = $instruments->skip($chunk_start)->take($chunk_end);
         return response()->json(InstrumentResource::collection($instruments));
     }
+    public function total()
+    {
+        return response()->json(["count" => Instrument::count()]);
+    }
+    public function selected(FormRequest $request)
+    {
+        $instruments = Instrument::findMany($request->ids);
+        return response(InstrumentResource::collection($instruments));
+    }
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateInstrumentRequest $request, Instrument $instrument)
     {
         $instrument->update($request->all());
-        return InstrumentResource::make($instrument);
+        return response(InstrumentResource::make($instrument));
     }
 
     /**
