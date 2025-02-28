@@ -15,7 +15,7 @@ export function InstrumentEdit() {
     const [image_data, setImageData] = React.useState<string>("");
     const fields = [
         {
-            name: 'image',
+            name: 'image_file',
             type: 'file',
             validate: (_: string) => true,
         },
@@ -63,7 +63,7 @@ export function InstrumentEdit() {
             if (res.img_id === null)
                 return;
             const image = await ServerApi.getImage(+res.img_id);
-            setImageData(image.data);
+            setImageData(image.blob);
         });
     }, []);
     async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -72,18 +72,26 @@ export function InstrumentEdit() {
         const formData = new FormData(form);
         await ServerApi.actionWithImageUpload(
             formData,
-            'image',
-            async (form_data_without_image: URLSearchParams) => {
+            'image_file',
+            async (form_data_with_image_id: URLSearchParams) => {
                 if (params.id === undefined) {
                     return;
                 }
-                if (form_data_without_image.size === 1) {
+                const not_changed_keys = [];
+                for (const [key, value] of form_data_with_image_id) {
+                    if (!value || (instrument_data as any)[key] == value) {
+                        not_changed_keys.push(key);
+                    }
+                }
+                if (not_changed_keys.length === form_data_with_image_id.size) {
                     setError('Пожалуйста измените данные');
                     return;
                 }
-                form_data_without_image.append('id', params.id);
+                for (const key of not_changed_keys) {
+                    form_data_with_image_id.delete(key);
+                }
                 try {
-                    const instrument = await ServerApi.updateInstrument(+params.id, form_data_without_image);
+                    const instrument = await ServerApi.updateInstrument(+params.id, form_data_with_image_id);
                     setInstrumentData(Instrument.create({
                         id: +instrument.id,
                         model_name: instrument.model_name,

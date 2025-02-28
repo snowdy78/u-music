@@ -26,8 +26,10 @@ export type DataBaseImageInstance = {
 export type DataBaseOrderInstance = {
 	id: number; user_id: number; goods: {id: number, count: number}[];
 };
-
-type RequestBodyInstance = Map<string, number|string|boolean|undefined|null>;
+export type ErrorResponse = {
+	message: string;
+	exception: string;
+};
 export class ServerApi {
 	public static url = 'http://u-music-api.ru';
 	private static async get(request_address: string, body?: any) {
@@ -102,13 +104,14 @@ export class ServerApi {
 		}
 		return response.data;
 	}
-	public static async getInstruments(
-			chunk_start: number = 0,
-			chunk_end: number = 1): Promise<DataBaseInstrumentInstance[]> {
-		const map: RequestBodyInstance = new Map();
-		map.set('chunk_start', chunk_start);
-		map.set('chunk_end', chunk_end);
-		return await ServerApi.get('/instruments', map);
+	public static async getInstruments(limit?: {index: number, count: number}): Promise<DataBaseInstrumentInstance[]> {
+		if (limit && limit.count !== -1) {
+			return await ServerApi.get(`/instruments/${limit.index}/${limit.count}`);
+		}
+		return await ServerApi.get('/instruments');
+	}
+	public static async getSelectedInstruments(ids: number[]): Promise<DataBaseInstrumentInstance[]> {
+		return await ServerApi.post('/select-instruments', JSON.stringify({ids}), {'Accept': 'application/json', 'Content-Type': 'application/json'});
 	}
 	public static async getOrders(): Promise<DataBaseOrderInstance[]> {
 		return await ServerApi.get('/orders');
@@ -123,10 +126,10 @@ export class ServerApi {
 		return await ServerApi.post('/users', body);
 	}
 	public static async addInstrument(body: URLSearchParams):
-			Promise<{id: number}> {
+			Promise<DataBaseInstrumentInstance | ErrorResponse> {
 		return await ServerApi.post('/instruments', body);
 	}
-	public static async addOrder(body: URLSearchParams): Promise<{id: number}> {
+	public static async addOrder(body: URLSearchParams|any): Promise<DataBaseOrderInstance> {
 		return await ServerApi.post('/orders', body);
 	}
 	public static async uploadImage(
@@ -163,7 +166,7 @@ export class ServerApi {
 		return await ServerApi.get(`/instruments/${id}`);
 	}
 	public static async getTotalNumberOfInstruments(): Promise<{count: number}> {
-		return await ServerApi.get('/count-instruments');
+		return await ServerApi.get('/instruments-total');
 	}
 	public static async getUser(attrs: DataBaseUserPossibleAttrs):
 			Promise<DataBaseUserInstance | null> {
@@ -188,9 +191,7 @@ export class ServerApi {
 		if (img && (img as File).size !== 0) {
 			image_data.append(image_key, form_data.get(image_key) as File);
 			const response = await ServerApi.uploadImage(image_data);
-			console.log('response: ', response);
 			img_id = response.id;
-			console.log('img_id: ', img_id);
 		}
 		form_data.delete(image_key);
 		if (img_id !== undefined) {

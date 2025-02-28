@@ -2,7 +2,7 @@ import React from "react";
 import { AdministratedPage } from "../AdministratedPage"
 import { ValidationFieldInstance, ValidationForm } from "../ValidationForm";
 import { arrayCategories } from "./Instruments";
-import { ServerApi } from "../../server-api";
+import { ServerApi, ErrorResponse } from "../../server-api";
 
 export function InstrumentAdd() {
     const can_be_submitted = React.useRef(false);
@@ -26,7 +26,7 @@ export function InstrumentAdd() {
     const fields: ValidationFieldInstance[] = [
         {
             placeholder: "Фото инструмента",
-            name: "image",
+            name: "image_file",
             type: "file",
             validate: (data: string) => data.length > 0,
             onPass,
@@ -76,12 +76,16 @@ export function InstrumentAdd() {
         try {
             await ServerApi.actionWithImageUpload(
                 form_data, 
-                'image', 
+                'image_file', 
                 async (instrument_data: URLSearchParams) => {
                     try {
-                        await ServerApi.addInstrument(instrument_data);
-                        setError('');
-                        setSuccess("Инструмент успешно добавлен");
+                        const response = await ServerApi.addInstrument(instrument_data);
+                        console.log("response: ", response);
+                        if (typeof response === 'object' && 'message' in response) {
+                            setError(response.message);
+                        } else {
+                            setSuccess("Инструмент успешно добавлен");
+                        }
                     } catch (e: any) {
                         setError(e.message);
                         setSuccess('');

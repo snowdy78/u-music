@@ -2,10 +2,10 @@ import React from 'react';
 import { useStore } from "../store/hooks/useStore";
 import { AuthorizedPage } from "./AuthorizedPage";
 import { InstrumentType } from "./Instrument";
-import { IInstrument } from "../store/Instrument";
+import { IInstrument, Instrument } from "../store/Instrument";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router";
-import { IBasketInstrument } from "../store/Basket";
+import { IBasketInstrument, BasketInstrument as BasketInstrumentModel } from "../store/Basket";
 import { ServerApi } from "../server-api";
 
 export type BasketInstrumentProps = {
@@ -62,30 +62,34 @@ export const Basket = observer(function() {
     const [order_success, setOrderSuccess] = React.useState<string>('');
     const [order_error, setOrderError] = React.useState<string>('');
     function updateInstruments() {
-        const array = store.instruments.getArray();
-        setInstruments(
-            array.filter((instrument: IInstrument): boolean => 
-                store.authorized_user?.basket?.ids_of_instruments.findIndex(
-                    (value, _) => value.id === instrument.id
-                ) !== -1
-            )
-        );
-        setBasketInstruments(
-            store.authorized_user?.basket?.ids_of_instruments.filter(
-                (value, _) => array.findIndex(
-                    (instrument: IInstrument): boolean => 
-                        instrument.id === value.id
-                ) !== -1
-            ) ?? []
+        if (!store.authorized_user?.basket) {
+            return;
+        }
+        const ids = store.authorized_user.basket.ids_of_instruments.map(item => item.id);
+        ServerApi.getSelectedInstruments(ids).then(
+            data => {
+                console.log(data);
+                const new_instruments: IInstrument[] = [];
+                const new_basket_instruments: IBasketInstrument[] = [];
+                for (let i = 0; i < data.length; i++) {
+                    new_instruments[i] = Instrument.create(data[i]);
+                    new_basket_instruments[i] = BasketInstrumentModel.create({
+                        id: data[i].id,
+                        count: store.authorized_user?.basket?.ids_of_instruments[i].count ?? 0
+                    });
+                }
+                for (let i = 0; i < new_instruments.length; i++) {
+                    new_instruments[i].loadImgData();
+                }
+                setInstruments(new_instruments);
+                setBasketInstruments(new_basket_instruments);
+            }
         );
     }
     React.useEffect(() => {
         if (store.authorized_user?.basket) {
             store.authorized_user.basket.load();
-            store.loadInstruments().then(async () => {
-                await store.instruments.loadImages();
-                updateInstruments();
-            });
+            updateInstruments();
         }
     }, []);
     React.useEffect(() => {
@@ -140,11 +144,11 @@ export const Basket = observer(function() {
             return;
         }
         const cart = store.authorized_user.basket;
-        const params = new URLSearchParams();
-        params.append('user_id', cart.user_id.toString());
-        params.append('goods', JSON.stringify(cart.ids_of_instruments));
         try {
-            await ServerApi.addOrder(params);
+            await ServerApi.addOrder({
+                user_id: cart.user_id,
+                goods: cart.ids_of_instruments
+            });
             setOrderSuccess(`Заказ успешно создан`);
             setOrderError('')
         } catch(err: any) {
