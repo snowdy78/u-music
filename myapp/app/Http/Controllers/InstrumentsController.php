@@ -25,7 +25,6 @@ class InstrumentsController extends Controller
     {
         return InstrumentResource::make(Instrument::create($request->all()));
     }
-
     /**
      * Display the specified resource.
      */
@@ -34,6 +33,20 @@ class InstrumentsController extends Controller
         return InstrumentResource::make($instrument);
     }
 
+    public function chunk(int $chunk_start, int $chunk_end, bool $reversed = false) 
+    {
+        $instruments = Instrument::all();
+        if ($reversed)
+        {
+            $instruments = $instruments->sortByDesc('id');
+        }
+        else 
+        {
+            $instruments = $instruments->sortBy('id');
+        }
+        $instruments = $instruments->skip($chunk_start)->take($chunk_end);
+        return response()->json(InstrumentResource::collection($instruments));
+    }
     /**
      * Update the specified resource in storage.
      */

@@ -25,4 +25,6 @@ Route::group([
     Route::apiResource('orders', 'OrdersController');
     
     Route::apiResource('images', 'ImagesController');
+
+    Route::get('/instruments/{chunk_start}/{chunk_end}/{reversed?}', 'InstrumentsController@chunk');
 });
