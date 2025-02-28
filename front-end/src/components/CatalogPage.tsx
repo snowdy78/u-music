@@ -40,7 +40,7 @@ export const CatalogPage = observer(function() {
     stock_from.current = search_params.get('stock_from') ?? '0';
     stock_to.current = search_params.get('stock_to') ?? '';
     category.current = search_params.get('category') ?? '';
-    store.loadInstruments(pageOffset, pageOffset + chunkSize).then(
+    store.loadInstruments({index: pageOffset, count: pageOffset + chunkSize}).then(
       async () => {
         const list: Searchable[] = [];
         await store.instruments.loadImages();

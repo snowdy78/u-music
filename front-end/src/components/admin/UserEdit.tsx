@@ -21,7 +21,7 @@ export function UserEdit() {
     const fields: ValidationFieldInstance[] = [
         {
             placeholder: "Фото профиля",
-            name: 'image',
+            name: 'image_file',
             type: 'file',
             validate: (_: string) => true
         },
@@ -54,12 +54,20 @@ export function UserEdit() {
         try {
             await ServerApi.actionWithImageUpload(
                 form_data,
-                'image',
+                'image_file',
                 async (user_data: URLSearchParams) => {
                     if (!params.id) {
                         return;
                     }
-                    user_data.append('id', params.id);
+                    const to_remove = [];
+                    for (let key of user_data.keys()) {
+                        if (user_data.get(key) == (user as any)[key]) {
+                            to_remove.push(key);
+                        }
+                    }
+                    for (let key of to_remove) {
+                        user_data.delete(key);
+                    }
                     try {
                         await ServerApi.updateUser(+params.id, user_data);
                         setError('');
